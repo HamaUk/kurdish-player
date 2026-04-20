@@ -95,7 +95,7 @@ class MainApp extends StatelessWidget {
       darkTheme: getDarkTheme(locale),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      locale: locale,
+      locale: const Locale('en'),
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
@@ -103,9 +103,13 @@ class MainApp extends StatelessWidget {
       builder:
           (context, widget) => Directionality(
             textDirection: TextDirection.ltr,
-            child: MediaQuery(
-              data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-              child: widget!,
+            child: Localizations.override(
+              context: context,
+              locale: locale,
+              child: MediaQuery(
+                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+                child: widget!,
+              ),
             ),
           ),
     );

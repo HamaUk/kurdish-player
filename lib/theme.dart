@@ -113,28 +113,38 @@ ThemeData getDarkTheme(Locale locale) {
 final lightTheme = getLightTheme(const Locale('en'));
 final darkTheme = getDarkTheme(const Locale('en'));
 
-final tvTheme = ThemeData(
-  fontFamily: fontFamily,
-  bottomSheetTheme: _bottomSheetTheme,
-  dialogTheme: _dialogTheme,
-  drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(), endShape: RoundedRectangleBorder()),
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE6272D)),
-  dividerTheme: const DividerThemeData(color: Colors.black12),
-  dividerColor: Colors.black12,
-  scrollbarTheme: const ScrollbarThemeData(radius: Radius.circular(10)),
-);
+ThemeData getTvTheme(Locale locale) {
+  final base = ThemeData.light();
+  return base.copyWith(
+    textTheme: buildTextTheme(locale, base.textTheme),
+    bottomSheetTheme: _bottomSheetTheme,
+    dialogTheme: _dialogTheme,
+    drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(), endShape: RoundedRectangleBorder()),
+    colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE6272D)),
+    dividerTheme: const DividerThemeData(color: Colors.black12),
+    dividerColor: Colors.black12,
+    scrollbarTheme: const ScrollbarThemeData(radius: Radius.circular(10)),
+  );
+}
 
-final tvDarkTheme = ThemeData(
-  fontFamily: fontFamily,
-  bottomSheetTheme: _bottomSheetTheme,
-  dialogTheme: _dialogTheme,
-  drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(), endShape: RoundedRectangleBorder()),
-  scaffoldBackgroundColor: Colors.black,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color(0xFFE6272D),
-    brightness: Brightness.dark,
-  ),
-  dividerTheme: const DividerThemeData(color: Colors.white12),
-  dividerColor: Colors.white12,
-  scrollbarTheme: const ScrollbarThemeData(radius: Radius.circular(10)),
-);
+ThemeData getTvDarkTheme(Locale locale) {
+  final base = ThemeData.dark();
+  return base.copyWith(
+    textTheme: buildTextTheme(locale, base.textTheme),
+    bottomSheetTheme: _bottomSheetTheme,
+    dialogTheme: _dialogTheme,
+    drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(), endShape: RoundedRectangleBorder()),
+    scaffoldBackgroundColor: Colors.black,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xFFE6272D),
+      brightness: Brightness.dark,
+    ),
+    dividerTheme: const DividerThemeData(color: Colors.white12),
+    dividerColor: Colors.white12,
+    scrollbarTheme: const ScrollbarThemeData(radius: Radius.circular(10)),
+  );
+}
+
+// Keep these as defaults or replace where used
+final tvTheme = getTvTheme(const Locale('en'));
+final tvDarkTheme = getTvDarkTheme(const Locale('en'));

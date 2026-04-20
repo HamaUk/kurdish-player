@@ -46,6 +46,8 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -53,85 +55,80 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
             colors: [_darkTop, _darkBottom],
           ),
         ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 500),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _panelColor,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.white10),
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: _panelColor,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: Colors.white10),
+                  ),
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
+                      const SizedBox(height: 24),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _titleController,
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName, Icons.label_important_outline),
+                              validator: (value) => requiredValidator(context, value),
+                            ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
+                            const SizedBox(height: 18),
+                            TextFormField(
+                              controller: _hostController,
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.serverFormItemLabelServer, Icons.dns_outlined, hint: "http://example.com:8080"),
+                              validator: (value) => requiredValidator(context, value),
+                            ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
+                            const SizedBox(height: 18),
+                            TextFormField(
+                              controller: _usernameController,
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelUsername, Icons.person_outline),
+                              validator: (value) => requiredValidator(context, value),
+                            ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
+                            const SizedBox(height: 18),
+                            TextFormField(
+                              controller: _passwordController,
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelPwd, Icons.password_outlined),
+                              obscureText: true,
+                              validator: (value) => requiredValidator(context, value),
+                            ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
+                          ],
+                        ),
                       ),
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
-                          const SizedBox(height: 24),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  controller: _titleController,
-                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName, Icons.label_important_outline),
-                                  validator: (value) => requiredValidator(context, value),
-                                ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
-                                const SizedBox(height: 18),
-                                TextFormField(
-                                  controller: _hostController,
-                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.serverFormItemLabelServer, Icons.dns_outlined, hint: "http://example.com:8080"),
-                                  validator: (value) => requiredValidator(context, value),
-                                ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
-                                const SizedBox(height: 18),
-                                TextFormField(
-                                  controller: _usernameController,
-                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelUsername, Icons.person_outline),
-                                  validator: (value) => requiredValidator(context, value),
-                                ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
-                                const SizedBox(height: 18),
-                                TextFormField(
-                                  controller: _passwordController,
-                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelPwd, Icons.password_outlined),
-                                  obscureText: true,
-                                  validator: (value) => requiredValidator(context, value),
-                                ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
-                              ],
-                            ),
+                      const SizedBox(height: 32),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: _accent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            elevation: 4,
+                            shadowColor: _accent.withOpacity(0.4),
                           ),
-                          const SizedBox(height: 32),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: FilledButton.icon(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: _accent,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                elevation: 4,
-                                shadowColor: _accent.withOpacity(0.4),
-                              ),
-                              onPressed: () => _onSubmit(context),
-                              icon: const Icon(Icons.login),
-                              label: Text(
-                                AppLocalizations.of(context)!.buttonSubmit,
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
-                        ],
-                      ),
-                    ),
+                          onPressed: () => _onSubmit(context),
+                          icon: const Icon(Icons.login),
+                          label: Text(
+                            AppLocalizations.of(context)!.buttonSubmit,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
+                    ],
                   ),
                 ),
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
