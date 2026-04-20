@@ -8,6 +8,7 @@ const _dialogTheme = DialogThemeData(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3.0))),
 );
 final lightTheme = ThemeData(
+  fontFamily: fontFamily,
   bottomSheetTheme: _bottomSheetTheme,
   dialogTheme: _dialogTheme,
   colorScheme: ColorScheme.fromSeed(
@@ -35,6 +36,7 @@ final lightTheme = ThemeData(
 );
 
 final darkTheme = ThemeData(
+  fontFamily: fontFamily,
   bottomSheetTheme: _bottomSheetTheme,
   dialogTheme: _dialogTheme,
   colorScheme: ColorScheme.fromSeed(

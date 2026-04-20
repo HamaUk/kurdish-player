@@ -85,28 +85,28 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: MaterialApp(
-        title: appName,
-        navigatorKey: navigatorKey,
-        showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: context.watch<UserConfig>().themeMode,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        locale: context.watch<UserConfig>().locale,
-        supportedLocales: AppLocalizations.supportedLocales,
-        navigatorObservers: [routeObserver],
-        home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
-        themeAnimationCurve: Curves.easeOut,
-        builder:
-            (context, widget) => MediaQuery(
+    return MaterialApp(
+      title: appName,
+      navigatorKey: navigatorKey,
+      showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: context.watch<UserConfig>().themeMode,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      locale: context.watch<UserConfig>().locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      navigatorObservers: [routeObserver],
+      home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
+      themeAnimationCurve: Curves.easeOut,
+      builder:
+          (context, widget) => Directionality(
+            textDirection: TextDirection.ltr,
+            child: MediaQuery(
               data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
               child: widget!,
             ),
-      ),
+          ),
     );
   }
 }

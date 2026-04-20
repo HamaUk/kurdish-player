@@ -61,87 +61,95 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
             colors: [_darkTop, _darkBottom],
           ),
         ),
-        child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 100, bottom: 24, left: 24, right: 24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
-            child: Container(
-              decoration: BoxDecoration(
-                color: _panelColor,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white10),
-              ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
               padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                  if (isFileMode)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: FilledButton.icon(
-                          onPressed: _loadingPicker ? null : _pickM3uFile,
-                          style: FilledButton.styleFrom(backgroundColor: _accent),
-                          icon:
-                              _loadingPicker
-                                  ? const SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  )
-                                  : const Icon(Icons.folder_open_rounded),
-                          label: Text(AppLocalizations.of(context)!.titleEditM3U),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _panelColor,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      padding: const EdgeInsets.all(24),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isFileMode)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: FilledButton.icon(
+                                    onPressed: _loadingPicker ? null : _pickM3uFile,
+                                    style: FilledButton.styleFrom(backgroundColor: _accent),
+                                    icon: _loadingPicker
+                                        ? const SizedBox(
+                                            width: 18,
+                                            height: 18,
+                                            child: CircularProgressIndicator(strokeWidth: 2),
+                                          )
+                                        : const Icon(Icons.folder_open_rounded),
+                                    label: Text(AppLocalizations.of(context)!.titleEditM3U),
+                                  ),
+                                ),
+                              ),
+                            Text(
+                              isFileMode
+                                  ? AppLocalizations.of(context)!.onboardingM3uFile
+                                  : AppLocalizations.of(context)!.onboardingM3uUrl,
+                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                            ).animate().fadeIn().slideY(begin: 0.2, duration: 400.ms),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _titleController,
+                              decoration: _inputDecoration(context, "Playlist Name"),
+                              validator: (value) => requiredValidator(context, value),
+                            ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, duration: 400.ms),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _urlController,
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.liveCreateFormItemLabelUrl),
+                              validator: (value) => urlValidator(context, value, true),
+                            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
+                            const SizedBox(height: 24),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 54,
+                              child: FilledButton(
+                                onPressed: () => _submit(context),
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: _accent,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  elevation: 4,
+                                  shadowColor: _accent.withOpacity(0.4),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.buttonSubmit,
+                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, duration: 400.ms),
+                          ],
                         ),
                       ),
                     ),
-                    Text(
-                      isFileMode ? AppLocalizations.of(context)!.onboardingM3uFile : AppLocalizations.of(context)!.onboardingM3uUrl,
-                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ).animate().fadeIn().slideY(begin: 0.2, duration: 400.ms),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: _inputDecoration(context, "Playlist Name"),
-                      validator: (value) => requiredValidator(context, value),
-                    ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, duration: 400.ms),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _urlController,
-                      decoration: _inputDecoration(context, AppLocalizations.of(context)!.liveCreateFormItemLabelUrl),
-                      validator: (value) => urlValidator(context, value, true),
-                    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: FilledButton(
-                        onPressed: () => _submit(context),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: _accent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          elevation: 4,
-                          shadowColor: _accent.withOpacity(0.4),
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.buttonSubmit,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, duration: 400.ms),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
-      ),
       ),
     );
   }

@@ -52,130 +52,107 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
             colors: [_darkTop, _darkBottom],
           ),
         ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 100, bottom: 24, left: 24, right: 24),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 500),
-              decoration: BoxDecoration(
-                color: _panelColor,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white10),
-              ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
               padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.cloud_download_rounded,
-                    size: 64,
-                    color: _accent,
-                  ).animate().fadeIn().scale(delay: 100.ms),
-                  const SizedBox(height: 24),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _titleController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelText: "Playlist Name",
-                            prefixIcon: const Icon(Icons.label_important_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
-                            ),
-                          ),
-                          validator: (value) => requiredValidator(context, value),
-                        ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
-                        const SizedBox(height: 18),
-                        TextFormField(
-                          controller: _hostController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelText: "Server URL (Host)",
-                            hintText: "http://example.com:8080",
-                            prefixIcon: const Icon(Icons.dns_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
-                            ),
-                          ),
-                          validator: (value) => requiredValidator(context, value),
-                        ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
-                        const SizedBox(height: 18),
-                        TextFormField(
-                          controller: _usernameController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelText: "Username",
-                            prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 500),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _panelColor,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.cloud_download_rounded,
+                            size: 64,
+                            color: _accent,
+                          ).animate().fadeIn().scale(delay: 100.ms),
+                          const SizedBox(height: 24),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: _titleController,
+                                  decoration: _inputDecoration(context, "Playlist Name", Icons.label_important_outline),
+                                  validator: (value) => requiredValidator(context, value),
+                                ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
+                                const SizedBox(height: 18),
+                                TextFormField(
+                                  controller: _hostController,
+                                  decoration: _inputDecoration(context, "Server URL (Host)", Icons.dns_outlined, hint: "http://example.com:8080"),
+                                  validator: (value) => requiredValidator(context, value),
+                                ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
+                                const SizedBox(height: 18),
+                                TextFormField(
+                                  controller: _usernameController,
+                                  decoration: _inputDecoration(context, "Username", Icons.person_outline),
+                                  validator: (value) => requiredValidator(context, value),
+                                ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
+                                const SizedBox(height: 18),
+                                TextFormField(
+                                  controller: _passwordController,
+                                  decoration: _inputDecoration(context, "Password", Icons.password_outlined),
+                                  obscureText: true,
+                                  validator: (value) => requiredValidator(context, value),
+                                ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
+                              ],
                             ),
                           ),
-                          validator: (value) => requiredValidator(context, value),
-                        ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
-                        const SizedBox(height: 18),
-                        TextFormField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            labelText: "Password",
-                            prefixIcon: const Icon(Icons.password_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
+                          const SizedBox(height: 32),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: _accent,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                elevation: 4,
+                                shadowColor: _accent.withOpacity(0.4),
+                              ),
+                              onPressed: () => _onSubmit(context),
+                              icon: const Icon(Icons.login),
+                              label: Text(
+                                AppLocalizations.of(context)!.buttonSubmit,
+                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
-                            ),
-                          ),
-                          obscureText: true,
-                          validator: (value) => requiredValidator(context, value),
-                        ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
-                      ],
+                          ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: FilledButton.icon(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: _accent,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 4,
-                        shadowColor: _accent.withOpacity(0.4),
-                      ),
-                      onPressed: () => _onSubmit(context),
-                      icon: const Icon(Icons.login),
-                      label: Text(
-                        AppLocalizations.of(context)!.buttonSubmit,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(BuildContext context, String label, IconData icon, {String? hint}) {
+    return InputDecoration(
+      isDense: true,
+      labelText: label,
+      hintText: hint,
+      prefixIcon: Icon(icon),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
       ),
     );
   }
