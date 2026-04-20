@@ -85,16 +85,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<UserConfig>().locale ?? const Locale('en');
     return MaterialApp(
       title: appName,
       navigatorKey: navigatorKey,
       showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: getLightTheme(locale),
+      darkTheme: getDarkTheme(locale),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      locale: context.watch<UserConfig>().locale,
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),

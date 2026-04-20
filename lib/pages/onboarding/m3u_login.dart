@@ -189,19 +189,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
   InputDecoration _inputDecoration(BuildContext context, String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.white70),
-      filled: true,
-      fillColor: Colors.white.withOpacity(0.05),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.white10),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF5E7BFF)),
-      ),
-      prefixIconColor: Colors.white70,
+      isDense: true,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 }
