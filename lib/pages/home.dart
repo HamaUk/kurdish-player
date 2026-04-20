@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../components/logo.dart';
 import '../l10n/app_localizations.dart';
+import '../providers/iptv_provider.dart';
 import 'components/mobile_builder.dart';
 import 'media/live_list.dart';
 import 'media/movie_list.dart';
@@ -19,13 +21,16 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int index = 0;
 
-  Widget get child => switch (index) {
-    0 => const TVListPage(),
-    1 => const MovieListPage(),
-    2 => BlocProvider(create: (_) => IptvCubit(), child: const LiveListPage()),
-    3 => const SettingsPage(),
-    _ => const Placeholder(),
-  };
+  Widget get child => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: switch (index) {
+          0 => BlocProvider(key: const ValueKey(0), create: (_) => IptvCubit(), child: const LiveListPage()),
+          1 => const MovieListPage(key: ValueKey(1)),
+          2 => const TVListPage(key: ValueKey(2)),
+          3 => const SettingsPage(key: ValueKey(3)),
+          _ => const Placeholder(),
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +41,7 @@ class _HomeViewState extends State<HomeView> {
         child: NavigationBar(
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations:
               _destinations(context).map((_TabDestination destination) {
                 return NavigationDestination(
@@ -47,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
               }).toList(),
         ),
       ),
-      backgroundColor: index == 2 ? Colors.transparent : null,
+      backgroundColor: index == 0 ? Colors.transparent : null,
       body: Row(
         children: <Widget>[
           MobileBuilder(
@@ -55,8 +61,8 @@ class _HomeViewState extends State<HomeView> {
             child: Row(
               children: [
                 NavigationRail(
-                  leading: const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Logo(size: 36)),
-                  labelType: NavigationRailLabelType.all,
+                  leading: const Padding(padding: EdgeInsets.symmetric(vertical: 24), child: Logo(size: 48)),
+                  labelType: NavigationRailLabelType.selected,
                   destinations:
                       _destinations(context)
                           .map(
@@ -83,21 +89,25 @@ class _HomeViewState extends State<HomeView> {
 
   List<_TabDestination> _destinations(BuildContext context) {
     return [
-      _TabDestination(AppLocalizations.of(context)!.homeTabTV, const Icon(Icons.tv_outlined), const Icon(Icons.tv)),
-      _TabDestination(
-        AppLocalizations.of(context)!.homeTabMovie,
-        const Icon(Icons.movie_creation_outlined),
-        const Icon(Icons.movie_creation),
-      ),
       _TabDestination(
         AppLocalizations.of(context)!.homeTabLive,
-        const Icon(Icons.live_tv_outlined),
-        const Icon(Icons.live_tv),
+        const Icon(Icons.live_tv_rounded).animate().fadeIn(),
+        const Icon(Icons.live_tv_rounded, color: Colors.redAccent).animate().scale(duration: 200.ms).shake(hz: 4),
+      ),
+      _TabDestination(
+        AppLocalizations.of(context)!.homeTabMovie,
+        const Icon(Icons.movie_filter_rounded).animate().fadeIn(),
+        const Icon(Icons.movie_filter_rounded).animate().scale(duration: 200.ms),
+      ),
+      _TabDestination(
+        AppLocalizations.of(context)!.homeTabTV,
+        const Icon(Icons.video_library_rounded).animate().fadeIn(),
+        const Icon(Icons.video_library_rounded).animate().scale(duration: 200.ms),
       ),
       _TabDestination(
         AppLocalizations.of(context)!.homeTabSettings,
-        const Icon(Icons.settings_outlined),
-        const Icon(Icons.settings),
+        const Icon(Icons.settings_suggest_rounded).animate().fadeIn(),
+        const Icon(Icons.settings_suggest_rounded).animate().rotate(duration: 300.ms),
       ),
     ];
   }

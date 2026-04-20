@@ -1,5 +1,6 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
@@ -101,42 +102,43 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                     controller: _titleController,
                     decoration: InputDecoration(
                       isDense: true,
-                      labelText: "Playlist Name",
-                      prefixIcon: const Icon(Icons.label_important_outline),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
+                    Text(
+                      isFileMode ? AppLocalizations.of(context)!.onboardingM3uFile : AppLocalizations.of(context)!.onboardingM3uUrl,
+                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ).animate().fadeIn().slideY(begin: 0.2, duration: 400.ms),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: _inputDecoration(context, "Playlist Name"),
+                      validator: (value) => requiredValidator(context, value),
+                    ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, duration: 400.ms),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _urlController,
+                      decoration: _inputDecoration(context, AppLocalizations.of(context)!.liveCreateFormItemLabelUrl),
+                      validator: (value) => urlValidator(context, value, true),
+                    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 54,
+                      child: FilledButton(
+                        onPressed: () => _submit(context),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: _accent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          elevation: 4,
+                          shadowColor: _accent.withOpacity(0.4),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        child: Text(
+                          AppLocalizations.of(context)!.buttonSubmit,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                    ),
-                    validator: (value) => requiredValidator(context, value),
-                  ),
-                  const SizedBox(height: 18),
-                  TextFormField(
-                    controller: _urlController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      labelText: AppLocalizations.of(context)!.liveCreateFormItemLabelUrl,
-                      helperText: AppLocalizations.of(context)!.liveCreateFormItemHelperUrl,
-                      prefixIcon: const Icon(Icons.link),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    validator: (value) => urlValidator(context, value, true),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: FilledButton.icon(
-                      style: FilledButton.styleFrom(backgroundColor: _accent),
-                      onPressed: () => _submit(context),
-                      icon: const Icon(Icons.check),
-                      label: Text(AppLocalizations.of(context)!.buttonSubmit),
-                    ),
-                  ),
+                      ),
+                    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, duration: 400.ms),
                   ],
                 ),
               ),

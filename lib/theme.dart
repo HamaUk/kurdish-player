@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const fontFamily = 'Roboto Condensed';
+const fontFamily = 'Rabar';
 const _bottomSheetTheme = BottomSheetThemeData(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(3.0))),
 );

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../components/async_image.dart';
 import '../../components/placeholder.dart';
@@ -107,7 +108,7 @@ class ImageCard extends StatelessWidget {
               ),
             ],
           ),
-        );
+        ).animate().fadeIn(duration: 400.ms).scale(begin: const Offset(0.95, 0.95));
       },
     );
   }

@@ -10,6 +10,7 @@ import '../../components/no_data.dart';
 import '../../components/playing_icon.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/models.dart';
+import '../../providers/iptv_provider.dart';
 import '../components/image_card.dart';
 import '../components/loading.dart';
 import '../player/player_controls_lite.dart';
@@ -25,6 +26,8 @@ class LiveListPage extends StatefulWidget {
 
 class _LiveListPageState extends State<LiveListPage> {
   final _controller = PlayerController<Channel>();
+  Playlist? _selectedPlaylist;
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -32,160 +35,68 @@ class _LiveListPageState extends State<LiveListPage> {
     super.dispose();
   }
 
+  Future<void> _loadPlaylist(Playlist playlist) async {
+    if (_selectedPlaylist?.id == playlist.id) return;
+    setState(() => _loading = true);
+    try {
+      final channels = await Api.playlistChannelsQueryById(playlist.id);
+      _controller.setPlaylist(channels.map(FromMedia.fromChannel).toList());
+      _selectedPlaylist = playlist;
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
-      body: Row(
-        children: [
-          Flexible(
-            flex: 3,
-            fit: FlexFit.tight,
-            child: Column(
-              children: [
-                PlayerControlsLite(_controller, artwork: Container(color: Colors.black)),
-                Expanded(
-                  child: Scaffold(
-                    primary: false,
-                    resizeToAvoidBottomInset: false,
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      primary: false,
-                      title: Text(AppLocalizations.of(context)!.homeTabLive),
-                      actions: [IconButton(onPressed: () => _addPlaylist(context), icon: const Icon(Icons.add))],
+      body: BlocBuilder<IptvCubit, List<Playlist>?>(
+        builder: (context, items) {
+          if (items == null) return const Loading();
+          if (items.isEmpty) return const NoData();
+
+          // Auto-load first playlist if none selected
+          if (_selectedPlaylist == null && !_loading) {
+            WidgetsBinding.instance.addPostFrameCallback((_) => _loadPlaylist(items.first));
+          }
+
+          return Row(
+            children: [
+              // Main content: Player + Channel Selection
+              Expanded(
+                child: Column(
+                  children: [
+                    // Professional Player Preview
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      color: Colors.black,
+                      child: PlayerControlsLite(_controller, artwork: const Logo(size: 80)),
                     ),
-                    body: BlocBuilder<IptvCubit, List<Playlist>?>(
-                      builder: (context, items) {
-                        return items == null
-                            ? const Loading()
-                            : items.isEmpty
-                            ? const NoData()
-                            : LayoutBuilder(
-                              builder: (context, constraints) {
-                                return ListView.builder(
-                                  itemCount: items.length,
-                                  itemBuilder: (context, index) {
-                                    final item = items[index];
-                                    return Material(
-                                      clipBehavior: Clip.hardEdge,
-                                      child: Slidable(
-                                        endActionPane: ActionPane(
-                                          extentRatio: (48 * 3) / constraints.maxWidth,
-                                          motion: const BehindMotion(),
-                                          children: [
-                                            IconButton(
-                                              onPressed: () async {
-                                                final resp = await showNotification(
-                                                  context,
-                                                  Api.playlistRefreshById(item.id),
-                                                );
-                                                if (resp?.error == null && context.mounted) {
-                                                  context.read<IptvCubit>().update();
-                                                }
-                                              },
-                                              icon: const Icon(Icons.refresh),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                final flag = await showDialog(
-                                                  context: context,
-                                                  builder: (context) => LiveEditPage(item: item),
-                                                );
-                                                if (flag == true && context.mounted) {
-                                                  context.read<IptvCubit>().update();
-                                                }
-                                              },
-                                              icon: const Icon(Icons.edit),
-                                            ),
-                                            IconButton(
-                                              onPressed: () async {
-                                                final confirm = await showConfirm(
-                                                  context,
-                                                  AppLocalizations.of(context)!.deleteConfirmText,
-                                                );
-                                                if (confirm != true) return;
-                                                if (!context.mounted) return;
-                                                final resp = await showNotification(
-                                                  context,
-                                                  Api.playlistDeleteById(item.id),
-                                                );
-                                                if (resp?.error != null) return;
-                                                if (!context.mounted) return;
-                                                context.read<IptvCubit>().update();
-                                              },
-                                              icon: const Icon(Icons.delete_outline_rounded),
-                                            ),
-                                          ],
-                                        ),
-                                        child: ListTile(
-                                          title:
-                                              item.title == null
-                                                  ? null
-                                                  : Text(item.title!, overflow: TextOverflow.ellipsis),
-                                          subtitle: Text(item.url, overflow: TextOverflow.ellipsis),
-                                          trailing: const Icon(Icons.chevron_right),
-                                          onTap: () async {
-                                            if (MediaQuery.of(context).size.aspectRatio <= 1) {
-                                              final playlist = await Api.playlistChannelsQueryById(item.id);
-                                              _controller.setPlaylist(playlist.map(FromMedia.fromChannel).toList());
-                                              _controller.play();
-                                              if (context.mounted) {
-                                                _showBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (context) => _ChannelListGrouped(
-                                                        controller: _controller,
-                                                        activeIndex: _controller.index.value,
-                                                        onTap: (index) async {
-                                                          await _controller.next(index);
-                                                          await _controller.play();
-                                                        },
-                                                      ),
-                                                );
-                                              }
-                                            } else {
-                                              final playlist = await Api.playlistChannelsQueryById(item.id);
-                                              _controller.setPlaylist(playlist.map(FromMedia.fromChannel).toList());
-                                              _controller.play();
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                      },
+                    const Divider(height: 1),
+                    // Grouped Categories and Channels List
+                    Expanded(
+                      child: _loading
+                          ? const Loading()
+                          : _ChannelListGrouped(
+                            controller: _controller,
+                            onTap: (index) async {
+                              await _controller.next(index);
+                              await _controller.play();
+                            },
+                          ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          if (MediaQuery.of(context).size.aspectRatio > 1)
-            Flexible(
-              flex: 2,
-              child: ListenableBuilder(
-                listenable: Listenable.merge([_controller.index, _controller.playlist]),
-                builder:
-                    (context, _) => _ChannelList(
-                      playlist: _controller.playlist.value,
-                      activeIndex: _controller.index.value,
-                      onTap: (index) async {
-                        await _controller.next(index);
-                        await _controller.play();
-                      },
-                    ),
               ),
-            )
-          else
-            const SizedBox(),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
+}
 
   Future<void> _addPlaylist(BuildContext context) async {
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
@@ -380,15 +291,3 @@ class _ChannelListGroupedState extends State<_ChannelListGrouped> {
   }
 }
 
-class IptvCubit extends Cubit<List<Playlist>?> {
-  IptvCubit([super.initialState]) {
-    update();
-  }
-
-  static bool refreshed = false;
-
-  Future<void> update() async {
-    final playlists = await Api.playlistQueryAll();
-    emit(playlists);
-  }
-}

@@ -25,20 +25,23 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SpinKitThreeBounce(
-        size: 24,
-        controller: _loadingController,
-        itemBuilder:
-            (context, index) => DecoratedBox(
-              decoration: BoxDecoration(
-                color: switch (index) {
-                  0 => Theme.of(context).colorScheme.primary,
-                  1 => Theme.of(context).colorScheme.primaryFixedDim,
-                  _ => Theme.of(context).colorScheme.primaryFixed,
-                },
-                shape: BoxShape.circle,
-              ),
-            ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SpinKitDoubleBounce(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            size: 60,
+          ),
+          SpinKitPulse(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.4),
+            size: 40,
+          ),
+          SpinKitRing(
+            color: Theme.of(context).colorScheme.primary,
+            size: 30,
+            lineWidth: 2,
+          ),
+        ],
       ),
     );
   }

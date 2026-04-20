@@ -1,5 +1,6 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
 import '../utils/notification.dart';
@@ -69,7 +70,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                     Icons.cloud_download_rounded,
                     size: 64,
                     color: _accent,
-                  ),
+                  ).animate().fadeIn().scale(delay: 100.ms),
                   const SizedBox(height: 24),
                   Form(
                     key: _formKey,
@@ -91,7 +92,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             ),
                           ),
                           validator: (value) => requiredValidator(context, value),
-                        ),
+                        ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
                         const SizedBox(height: 18),
                         TextFormField(
                           controller: _hostController,
@@ -110,7 +111,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             ),
                           ),
                           validator: (value) => requiredValidator(context, value),
-                        ),
+                        ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
                         const SizedBox(height: 18),
                         TextFormField(
                           controller: _usernameController,
@@ -120,15 +121,15 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             prefixIcon: const Icon(Icons.person_outline),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
                             ),
                           ),
                           validator: (value) => requiredValidator(context, value),
-                        ),
+                        ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
                         const SizedBox(height: 18),
                         TextFormField(
                           controller: _passwordController,
@@ -138,16 +139,16 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             prefixIcon: const Icon(Icons.password_outlined),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
                             ),
                           ),
                           obscureText: true,
                           validator: (value) => requiredValidator(context, value),
-                        ),
+                        ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
                       ],
                     ),
                   ),
@@ -156,7 +157,12 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                     width: double.infinity,
                     height: 56,
                     child: FilledButton.icon(
-                      style: FilledButton.styleFrom(backgroundColor: _accent),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: _accent,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 4,
+                        shadowColor: _accent.withOpacity(0.4),
+                      ),
                       onPressed: () => _onSubmit(context),
                       icon: const Icon(Icons.login),
                       label: Text(
@@ -164,7 +170,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
+                  ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
                 ],
               ),
             ),

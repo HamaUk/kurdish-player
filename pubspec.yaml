@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   intl: any
   animations: ^2.1.1
+  flutter_animate: ^4.5.2
   api:
     git:
       url: https://github.com/GhostenEditor/Ghosten-Player-flutter-packages.git
@@ -87,3 +88,6 @@ flutter:
     - family: Roboto Condensed
       fonts:
         - asset: fonts/RobotoCondensed-Regular.ttf
+    - family: Rabar
+      fonts:
+        - asset: fonts/Rabar_022.ttf

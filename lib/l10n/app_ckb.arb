@@ -50,10 +50,10 @@
   "homeTabLive": "ڕاستەوخۆ",
   "homeTabMovie": "فیلم",
   "homeTabSettings": "ڕێکخستنەکان",
-  "homeTabTV": "زنجیرەکان",
+  "homeTabTV": "زنجیرە",
   "iptvDefaultSource": "سەرچاوەی IPTV ئاسایی",
   "noData": "هیچ داتایەک نییە",
-  "pageTitleAccount": "هەژمار",
+  "pageTitleAccount": "لیستی پەخش",
   "pageTitleAdd": "زیادکردن",
   "pageTitleEdit": "دەسکاریکردن",
   "pageTitleLogin": "چوونەژوورەوە",
@@ -126,5 +126,6 @@
   "videoSettingsVideo": "ڤیدیۆ",
   "videoSettingsAudio": "دەنگ",
   "videoSettingsSubtitle": "ژێرنووس",
-  "videoSettingsSpeeding": "خێرایی"
+  "videoSettingsSpeeding": "خێرایی",
+  "settingsItemAccount": "لیستی پەخش"
 }

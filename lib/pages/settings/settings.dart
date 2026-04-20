@@ -12,6 +12,7 @@ import '../account/account.dart';
 import '../library.dart';
 import '../player/singleton_player.dart';
 import '../utils/utils.dart';
+import 'playlist_settings.dart';
 import 'settings_diagnostics.dart';
 import 'settings_downloader.dart';
 import 'settings_help.dart';
@@ -33,95 +34,50 @@ class SettingsPage extends StatelessWidget {
         leading: isMobile(context) ? const Padding(padding: EdgeInsets.all(12), child: Logo()) : null,
       ),
       body: ScrollbarListView(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         children: [
           _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemAccount,
-            Icons.account_box_outlined,
-            onTap: () => navigateTo(context, const AccountManage()),
+            Icons.view_list_rounded,
+            onTap: () => navigateTo(context, const PlaylistSettingsPage()),
           ),
+          const Divider(height: 32),
           _buildItem(
-            AppLocalizations.of(context)!.settingsItemTV,
-            Icons.tv,
-            onTap: () => navigateTo(context, const LibraryManage(type: LibraryType.tv)),
-          ),
-          _buildItem(
-            AppLocalizations.of(context)!.settingsItemMovie,
-            Icons.movie_creation_outlined,
-            onTap: () => navigateTo(context, const LibraryManage(type: LibraryType.movie)),
-          ),
-          const Divider(),
-          _buildItem(
-            AppLocalizations.of(context)!.buttonPlay,
-            Icons.play_arrow_outlined,
-            onTap: () async {
-              final data = await showDialog<(Uri?, String?)>(
-                context: context,
-                builder: (context) => const _UrlDialog(),
-              );
-              if (data != null && context.mounted) {
-                navigateTo(
-                  context,
-                  SingletonPlayer(playlist: [PlaylistItemDisplay(url: data.$1, fileId: data.$2, source: null)]),
-                );
-              }
-            },
-          ),
-          _buildItem(
-            AppLocalizations.of(context)!.settingsItemPlayerHistory,
-            Icons.history_rounded,
-            onTap: () => navigateTo(context, const SystemSettingsPlayerHistory()),
-          ),
-          _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemDownload,
-            Icons.download_outlined,
+            Icons.download_for_offline_rounded,
             onTap: () => navigateTo(context, const SystemSettingsDownloader()),
           ),
-          const Divider(),
           _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemServer,
-            Icons.storage_outlined,
+            Icons.dns_rounded,
             onTap: () => navigateTo(context, const SystemSettingsServer()),
           ),
           _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemNetworkDiagnostics,
-            Icons.rule_rounded,
+            Icons.signal_cellular_alt_rounded,
             onTap: () => navigateTo(context, const SettingsDiagnostics()),
           ),
           _buildItem(
-            AppLocalizations.of(context)!.settingsItemLog,
-            Icons.article_outlined,
-            onTap: () => navigateTo(context, const SettingsLogPage()),
-          ),
-          _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemOthers,
-            Icons.more_horiz_rounded,
+            Icons.tune_rounded,
             onTap: () => navigateTo(context, const SystemSettingsOther()),
           ),
-          const Divider(),
+          const Divider(height: 32),
           _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemHelp,
-            Icons.help_outline_rounded,
+            Icons.help_center_rounded,
             onTap: () => navigateTo(context, const SettingsHelp()),
           ),
           _buildItem(
-            AppLocalizations.of(context)!.settingsItemFeedback,
-            Icons.feedback_outlined,
-            onTap: () {
-              launchUrlString(
-                'https://github.com/$repoAuthor/$repoName/issues',
-                browserConfiguration: const BrowserConfiguration(showTitle: true),
-              );
-            },
-          ),
-          _buildItem(
-            AppLocalizations.of(context)!.settingsItemSponsor,
-            Icons.card_giftcard_rounded,
-            onTap: () => navigateTo(context, const SettingsSponsor()),
-          ),
-          _buildItem(
+            context,
             AppLocalizations.of(context)!.settingsItemInfo,
-            Icons.info_outline,
+            Icons.info_rounded,
             onTap: () => navigateTo(context, const SystemSettingsUpdater()),
           ),
         ],
@@ -129,16 +85,21 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(String title, IconData icon, {Widget? trailing, GestureTapCallback? onTap}) {
-    return ListTile(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Expanded(child: Text(title)), if (trailing != null) trailing],
+  Widget _buildItem(BuildContext context, String title, IconData icon, {Widget? trailing, GestureTapCallback? onTap}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
       ),
-      leading: Icon(icon),
-      trailing: onTap == null ? null : const Icon(Icons.chevron_right),
-      onTap: onTap,
-    );
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        trailing: onTap == null ? null : Icon(Icons.chevron_right_rounded, color: Theme.of(context).colorScheme.outline),
+        onTap: onTap,
+      ),
+    ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideX(begin: 0.1);
   }
 }
 

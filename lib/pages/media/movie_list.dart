@@ -47,11 +47,7 @@ class _MovieListPageState extends State<MovieListPage> {
                 onChanged: (index) {
                   _backdrop.value = snapshot.requireData[index].backdrop;
                 },
-                noDataBuilder:
-                    (context) => FilledButton(
-                      child: Text(AppLocalizations.of(context)!.settingsItemMovie),
-                      onPressed: () => navigateTo(context, const LibraryManage(type: LibraryType.movie)),
-                    ),
+                noDataBuilder: (_) => const SizedBox.shrink(),
                 itemBuilder: (BuildContext context, int index) {
                   final item = snapshot.requireData[index];
                   return CarouselItem(item: item, onPressed: () => _onMediaTap(context, item.id));
