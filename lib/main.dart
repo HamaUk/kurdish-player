@@ -59,25 +59,6 @@ void main(List<String> args) async {
         }
       });
     }
-    ErrorWidget.builder = (FlutterErrorDetails details) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: const Color(0xFF141A2A),
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: SelectableText(
-                "UI ERROR:\n${details.exception}\n\nStack:\n${details.stack}",
-                style: const TextStyle(color: Colors.redAccent, fontSize: 13, fontFamily: 'monospace'),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-      );
-    };
-
     final playlists = await Api.playlistQueryAll();
     final drivers = await Api.driverQueryAll();
     final hasData = playlists.isNotEmpty || drivers.isNotEmpty;
@@ -118,34 +99,22 @@ class MainApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
       debugShowCheckedModeBanner: false,
-      theme: getLightTheme(const Locale('en')),
-      darkTheme: getDarkTheme(const Locale('en')),
+      theme: getLightTheme(locale),
+      darkTheme: getDarkTheme(locale),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      locale: const Locale('en'),
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
       themeAnimationCurve: Curves.easeOut,
       builder: (context, widget) {
         if (widget == null) return const SizedBox.shrink();
-        
-        final currentTheme = Theme.of(context);
-        return Localizations.override(
-          context: context,
-          locale: locale,
-          delegates: AppLocalizations.localizationsDelegates,
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Theme(
-              data: currentTheme.copyWith(
-                textTheme: buildTextTheme(locale, currentTheme.textTheme),
-              ),
-              child: MediaQuery(
-                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-                child: widget,
-              ),
-            ),
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: MediaQuery(
+            data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+            child: widget,
           ),
         );
       },
