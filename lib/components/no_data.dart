@@ -14,7 +14,11 @@ class NoData extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(assetsNoData, width: 200, height: 200),
+          Opacity(
+            opacity: 0.5,
+            child: Image.asset(assetsLogo, width: 120, height: 120, fit: BoxFit.contain),
+          ),
+          const SizedBox(height: 24),
           Padding(
             padding: action == null ? const EdgeInsets.only(bottom: 16) : EdgeInsets.zero,
             child: Text(AppLocalizations.of(context)!.noData),
