@@ -127,23 +127,26 @@ class MainApp extends StatelessWidget {
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
       themeAnimationCurve: Curves.easeOut,
-      builder:
-          (context, widget) => Localizations.override(
-            context: context,
-            locale: locale,
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  textTheme: buildTextTheme(locale, Theme.of(context).textTheme),
-                ),
-                child: MediaQuery(
-                  data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-                  child: widget!,
-                ),
+      builder: (context, widget) {
+        if (widget == null) return const SizedBox.shrink();
+        return Localizations.override(
+          context: context,
+          locale: locale,
+          delegates: AppLocalizations.localizationsDelegates,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                textTheme: buildTextTheme(locale, Theme.of(context).textTheme),
+              ),
+              child: MediaQuery(
+                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+                child: widget,
               ),
             ),
           ),
+        );
+      },
     );
   }
 }

@@ -41,6 +41,9 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return const SizedBox.shrink(); // Safety check
+
     final isFileMode = widget.mode == M3uLoginMode.file;
     return Scaffold(
       appBar: AppBar(
@@ -49,8 +52,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
         foregroundColor: Colors.white,
         title: Text(
           isFileMode
-              ? AppLocalizations.of(context)!.onboardingM3uFile
-              : AppLocalizations.of(context)!.onboardingM3uUrl,
+              ? l10n.onboardingM3uFile
+              : l10n.onboardingM3uUrl,
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -97,7 +100,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                         child: CircularProgressIndicator(strokeWidth: 2),
                                       )
                                     : const Icon(Icons.folder_open_rounded),
-                                label: Text(AppLocalizations.of(context)!.titleEditM3U),
+                                label: Text(l10n.titleEditM3U),
                               ),
                             ),
                           ),
@@ -105,8 +108,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                         const SizedBox(height: 24),
                         Text(
                           isFileMode
-                              ? AppLocalizations.of(context)!.onboardingM3uFile
-                              : AppLocalizations.of(context)!.onboardingM3uUrl,
+                              ? l10n.onboardingM3uFile
+                              : l10n.onboardingM3uUrl,
                           style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -115,13 +118,13 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _titleController,
-                          decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName),
+                          decoration: _inputDecoration(context, l10n.buttonName),
                           validator: (value) => requiredValidator(context, value),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _urlController,
-                          decoration: _inputDecoration(context, AppLocalizations.of(context)!.liveCreateFormItemLabelUrl),
+                          decoration: _inputDecoration(context, l10n.liveCreateFormItemLabelUrl),
                           validator: (value) => urlValidator(context, value, true),
                         ),
                         const SizedBox(height: 24),
@@ -137,7 +140,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                               shadowColor: _accent.withOpacity(0.4),
                             ),
                             child: Text(
-                              AppLocalizations.of(context)!.buttonSubmit,
+                              l10n.buttonSubmit,
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
