@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../components/logo.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/utils.dart';
+import '../home.dart';
 import '../media/dialogs/live_edit.dart';
 import '../media/live_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,7 +150,9 @@ class SourceSelectionPage extends StatelessWidget {
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
     if (flag == true && context.mounted) {
        // Refresh or Navigate to Home
-       Navigator.of(context).pushReplacementNamed('/');
+       Navigator.of(context).pushReplacement(
+         MaterialPageRoute(builder: (context) => const HomeView()),
+       );
     }
   }
 
@@ -158,7 +161,9 @@ class SourceSelectionPage extends StatelessWidget {
     // Since Xtream is requested, I'll create a simple dialog for it in the next step
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
     if (flag == true && context.mounted) {
-       Navigator.of(context).pushReplacementNamed('/');
+       Navigator.of(context).pushReplacement(
+         MaterialPageRoute(builder: (context) => const HomeView()),
+       );
     }
   }
 

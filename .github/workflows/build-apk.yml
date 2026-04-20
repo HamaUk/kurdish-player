@@ -32,14 +32,14 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build Mobile Debug APK
-        run: flutter build apk --debug --flavor mobile
+      - name: Build Mobile APK
+        run: flutter build apk --release --flavor mobile --split-per-abi
 
-      - name: Build TV Debug APK
-        run: flutter build apk --debug --flavor tv --target lib/main_tv.dart
+      - name: Build TV APK
+        run: flutter build apk --release --flavor tv --target lib/main_tv.dart --split-per-abi
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: kurdish-player-apks
-          path: build/app/outputs/flutter-apk/app-*-debug.apk
+          path: build/app/outputs/flutter-apk/app-*-release.apk
