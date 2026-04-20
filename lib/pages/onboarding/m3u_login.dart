@@ -98,10 +98,6 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                         ),
                       ),
                     ),
-                  TextFormField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      isDense: true,
                     Text(
                       isFileMode ? AppLocalizations.of(context)!.onboardingM3uFile : AppLocalizations.of(context)!.onboardingM3uUrl,
                       style: Theme.of(context).textTheme.headlineSmall!.copyWith(

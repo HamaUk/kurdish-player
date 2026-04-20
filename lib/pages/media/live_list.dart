@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:video_player/player.dart';
 
 import '../../components/async_image.dart';
+import '../../components/logo.dart';
 import '../../components/no_data.dart';
 import '../../components/playing_icon.dart';
 import '../../l10n/app_localizations.dart';
@@ -94,10 +95,6 @@ class _LiveListPageState extends State<LiveListPage> {
           );
         },
       ),
-    );
-  }
-}
-
   Future<void> _addPlaylist(BuildContext context) async {
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
     if (flag == true && context.mounted) context.read<IptvCubit>().update();
