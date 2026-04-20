@@ -30,7 +30,7 @@ class SourceSelectionPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Logo(size: 120),
+                const Logo(size: 200),
                 const SizedBox(height: 32),
                 Text(
                   AppLocalizations.of(context)!.onboardingTitle,

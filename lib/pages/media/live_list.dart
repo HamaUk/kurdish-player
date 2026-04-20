@@ -31,6 +31,18 @@ class _LiveListPageState extends State<LiveListPage> {
   bool _loading = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Prevent auto-advancing to next channel on Live TV
+    // Set status to idle or error rather than jumping to next if stream drops
+    _controller.status.addListener(() {
+      if (_controller.status.value == PlayerStatus.ended) {
+        _controller.pause(); // Stop instead of advancing
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -70,10 +82,14 @@ class _LiveListPageState extends State<LiveListPage> {
                 child: Column(
                   children: [
                     // Professional Player Preview
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.35,
-                      color: Colors.black,
-                      child: PlayerControlsLite(_controller, artwork: const Logo(size: 80)),
+                      child: ClipRect(
+                        child: PlayerControlsLite(
+                          _controller,
+                          artwork: const Logo(size: 80),
+                        ),
+                      ),
                     ),
                     const Divider(height: 1),
                     // Grouped Categories and Channels List

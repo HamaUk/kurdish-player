@@ -101,6 +101,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                   ),
                                 ),
                               ),
+                            const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
+                            const SizedBox(height: 24),
                             Text(
                               isFileMode
                                   ? AppLocalizations.of(context)!.onboardingM3uFile
@@ -109,7 +111,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
-                            ).animate().fadeIn().slideY(begin: 0.2, duration: 400.ms),
+                            ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _titleController,

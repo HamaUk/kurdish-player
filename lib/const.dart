@@ -5,8 +5,7 @@ const repoAuthor = String.fromEnvironment('REPO_AUTHOR', defaultValue: 'KurdishP
 const repoName = String.fromEnvironment('REPO_NAME', defaultValue: 'KURDISH-PLAYER');
 const updateUrl = 'https://api.github.com/repos/$repoAuthor/$repoName/releases';
 const libmpvUrl = 'https://api.github.com/repos/$repoAuthor/libmpv-build/releases';
-const ua =
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36';
+const ua = 'VLC/3.0.18 LibVLC/3.0.18';
 const headerUserAgent = 'User-Agent';
 const assetsLogo = 'assets/common/images/logo.png';
 const assetsNoData = 'assets/common/images/no data.png';

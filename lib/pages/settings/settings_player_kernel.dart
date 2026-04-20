@@ -136,22 +136,28 @@ class _SettingsPlayerKernelState extends State<SettingsPlayerKernel> {
 
   Future<void> _getRemoteMpvLibs() async {
     if (_remoteMpvLibs != null) return;
-    setState(() {});
-    final arch = await PlatformApi.arch();
-    final resp = await Dio(BaseOptions(connectTimeout: const Duration(seconds: 30))).get(libmpvUrl);
-    if (!mounted) return;
-    final data = (resp.data as List<dynamic>).cast<Map<String, dynamic>>().map(UpdateResp.fromJson).toList();
-    _remoteMpvLibs =
-        data
-            .map(
-              (it) => _MpvLib(
-                version: it.tagName,
-                downloadUrl: it.assets.firstWhereOrNull((item) => item.name == '$arch.zip')?.url,
-              ),
-            )
-            .where((it) => _localMpvLibs.firstWhereOrNull((i) => i.version == it.version) == null)
-            .toList();
-    setState(() {});
+    try {
+      setState(() {});
+      final arch = await PlatformApi.arch();
+      final resp = await Dio(BaseOptions(connectTimeout: const Duration(seconds: 30))).get(libmpvUrl);
+      if (!mounted) return;
+      final data = (resp.data as List<dynamic>).cast<Map<String, dynamic>>().map(UpdateResp.fromJson).toList();
+      _remoteMpvLibs =
+          data
+              .map(
+                (it) => _MpvLib(
+                  version: it.tagName,
+                  downloadUrl: it.assets.firstWhereOrNull((item) => item.name == '$arch.zip')?.url,
+                ),
+              )
+              .where((it) => _localMpvLibs.firstWhereOrNull((i) => i.version == it.version) == null)
+              .toList();
+    } catch (e) {
+      debugPrint('Failed to load remote MPV libs: $e');
+      _remoteMpvLibs = []; // Set empty to stop loading spinner
+    } finally {
+      if (mounted) setState(() {});
+    }
   }
 
   Future<void> _getLocalMpvLibs() async {

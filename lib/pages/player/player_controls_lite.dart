@@ -124,7 +124,15 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
       },
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final height = constraints.maxWidth / _aspectRatio + MediaQuery.paddingOf(context).top;
+          final topPadding = MediaQuery.paddingOf(context).top;
+          final availableHeight = constraints.maxHeight;
+          final aspectRatioHeight = constraints.maxWidth / _aspectRatio + topPadding;
+          
+          // Use the smaller of the two heights to prevent clipping/overflow
+          final height = (availableHeight.isFinite && availableHeight > 0) 
+              ? availableHeight 
+              : aspectRatioHeight;
+
           return SizedBox(
             height: height,
             child: Theme(

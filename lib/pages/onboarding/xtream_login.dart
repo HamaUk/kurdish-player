@@ -71,11 +71,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.cloud_download_rounded,
-                            size: 64,
-                            color: _accent,
-                          ).animate().fadeIn().scale(delay: 100.ms),
+                          const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
                           const SizedBox(height: 24),
                           Form(
                             key: _formKey,
