@@ -99,22 +99,34 @@ class MainApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
       debugShowCheckedModeBanner: false,
-      theme: getLightTheme(locale),
-      darkTheme: getDarkTheme(locale),
+      theme: getLightTheme(const Locale('en')),
+      darkTheme: getDarkTheme(const Locale('en')),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      locale: locale,
+      locale: const Locale('en'),
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
       themeAnimationCurve: Curves.easeOut,
       builder: (context, widget) {
         if (widget == null) return const SizedBox.shrink();
-        return Directionality(
-          textDirection: TextDirection.ltr,
-          child: MediaQuery(
-            data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-            child: widget,
+        
+        final currentTheme = Theme.of(context);
+        return Localizations.override(
+          context: context,
+          locale: locale,
+          delegates: AppLocalizations.localizationsDelegates,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Theme(
+              data: currentTheme.copyWith(
+                textTheme: buildTextTheme(locale, currentTheme.textTheme),
+              ),
+              child: MediaQuery(
+                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+                child: widget,
+              ),
+            ),
           ),
         );
       },
