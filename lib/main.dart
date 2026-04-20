@@ -44,8 +44,10 @@ void main(List<String> args) async {
     }
     setPreferredOrientations(false);
     final userConfig = await UserConfig.init();
-    ScaledWidgetsFlutterBinding.instance.scaleFactor =
-        (deviceSize) => max(1, deviceSize.width / 1140) * userConfig.displayScale;
+    ScaledWidgetsFlutterBinding.instance.scaleFactor = (deviceSize) {
+      if (deviceSize.width <= 0) return 1.0; // Fail-safe fallback
+      return max(1.0, deviceSize.width / 1140) * userConfig.displayScale;
+    };
     Provider.debugCheckInvalidValueType = null;
     if (!kIsWeb && userConfig.shouldCheckUpdate()) {
       Future.microtask(() async {
@@ -101,11 +103,11 @@ class MainApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
       debugShowCheckedModeBanner: false,
-      theme: getLightTheme(const Locale('en')),
-      darkTheme: getDarkTheme(const Locale('en')),
+      theme: getLightTheme(locale),
+      darkTheme: getDarkTheme(locale),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      locale: const Locale('en'),
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: [routeObserver],
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
@@ -113,22 +115,12 @@ class MainApp extends StatelessWidget {
       builder: (context, widget) {
         if (widget == null) return const SizedBox.shrink();
         
-        final currentTheme = Theme.of(context);
-        return Localizations.override(
-          context: context,
-          locale: locale,
-          delegates: AppLocalizations.localizationsDelegates,
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Theme(
-              data: currentTheme.copyWith(
-                textTheme: buildTextTheme(locale, currentTheme.textTheme),
-              ),
-              child: MediaQuery(
-                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-                child: widget,
-              ),
-            ),
+        // Final "Safe Force" for LTR Directionality
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: MediaQuery(
+            data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+            child: widget,
           ),
         );
       },
