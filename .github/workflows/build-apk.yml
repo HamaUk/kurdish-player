@@ -22,8 +22,12 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: '3.32.8'
           cache: true
+
+      - name: Patch Flutter SDK
+        run: |
+          sed -i '918a\rect = rect.inflate(96);' ${{ env.FLUTTER_ROOT }}/packages/flutter/lib/src/rendering/viewport.dart
 
       - name: Get dependencies
         run: flutter pub get
@@ -38,6 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: kurdish-player-apks
-          path: |
-            build/app/outputs/flutter-apk/app-mobile-debug.apk
-            build/app/outputs/flutter-apk/app-tv-debug.apk
+          path: build/app/outputs/flutter-apk/app-*-debug.apk
