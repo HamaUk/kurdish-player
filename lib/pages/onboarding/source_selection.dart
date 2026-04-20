@@ -7,6 +7,7 @@ import '../media/dialogs/live_edit.dart';
 import '../media/live_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../theme.dart';
+import 'xtream_login.dart';
 
 class SourceSelectionPage extends StatelessWidget {
   const SourceSelectionPage({super.key});
@@ -60,7 +61,7 @@ class SourceSelectionPage extends StatelessWidget {
                   context,
                   icon: Icons.file_present_rounded,
                   title: AppLocalizations.of(context)!.onboardingM3uFile,
-                  onTap: () => _addM3uUrl(context), // LiveEdit handles file picker internally
+                  onTap: () => _addM3uUrl(context),
                 ),
                 _buildSourceOption(
                   context,
@@ -92,54 +93,58 @@ class SourceSelectionPage extends StatelessWidget {
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 400,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-          decoration: BoxDecoration(
-            color: isSpecial 
-                ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5) 
-                : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            width: 400,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+            decoration: BoxDecoration(
               color: isSpecial 
-                  ? Theme.of(context).colorScheme.secondary.withOpacity(0.3) 
-                  : Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                  ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5) 
+                  : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSpecial 
+                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.3) 
+                    : Theme.of(context).colorScheme.outline.withOpacity(0.1),
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isSpecial 
-                      ? Theme.of(context).colorScheme.secondary 
-                      : Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isSpecial 
+                        ? Theme.of(context).colorScheme.secondary 
+                        : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isSpecial 
+                        ? Theme.of(context).colorScheme.onSecondary 
+                        : Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-                child: Icon(
-                  icon,
-                  color: isSpecial 
-                      ? Theme.of(context).colorScheme.onSecondary 
-                      : Theme.of(context).colorScheme.primary,
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 20),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
+                Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
                 ),
-              ),
-              const Spacer(),
-              Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -149,27 +154,21 @@ class SourceSelectionPage extends StatelessWidget {
   Future<void> _addM3uUrl(BuildContext context) async {
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
     if (flag == true && context.mounted) {
-       // Refresh or Navigate to Home
-       Navigator.of(context).pushReplacement(
-         MaterialPageRoute(builder: (context) => const HomeView()),
-       );
+       Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeView()),
+          (route) => false,
+        );
     }
   }
 
   Future<void> _addXtream(BuildContext context) async {
-    // For now, reuse LiveEditPage as a placeholder or implement Xtream dialog
-    // Since Xtream is requested, I'll create a simple dialog for it in the next step
-    final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
-    if (flag == true && context.mounted) {
-       Navigator.of(context).pushReplacement(
-         MaterialPageRoute(builder: (context) => const HomeView()),
-       );
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const XtreamLoginPage()),
+    );
   }
 
   void _singlePlay(BuildContext context) {
-    // Navigate to a simple player with URL input
-    // For now, just show a message or reuse LiveEdit
+    // For single play we can also use the LiveEdit dialog for now
     _addM3uUrl(context);
   }
 }
