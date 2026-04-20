@@ -129,6 +129,8 @@ class MainApp extends StatelessWidget {
       themeAnimationCurve: Curves.easeOut,
       builder: (context, widget) {
         if (widget == null) return const SizedBox.shrink();
+        
+        final currentTheme = Theme.of(context);
         return Localizations.override(
           context: context,
           locale: locale,
@@ -136,8 +138,8 @@ class MainApp extends StatelessWidget {
           child: Directionality(
             textDirection: TextDirection.ltr,
             child: Theme(
-              data: Theme.of(context).copyWith(
-                textTheme: buildTextTheme(locale, Theme.of(context).textTheme),
+              data: currentTheme.copyWith(
+                textTheme: buildTextTheme(locale, currentTheme.textTheme),
               ),
               child: MediaQuery(
                 data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),

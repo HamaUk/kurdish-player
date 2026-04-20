@@ -110,7 +110,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                           isFileMode
                               ? l10n.onboardingM3uFile
                               : l10n.onboardingM3uUrl,
-                          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          style: (Theme.of(context).textTheme.headlineSmall ?? const TextStyle()).copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
