@@ -15,7 +15,7 @@ class XtreamLoginPage extends StatefulWidget {
 class _XtreamLoginPageState extends State<XtreamLoginPage> {
   static const _darkTop = Color(0xFF0B1020);
   static const _darkBottom = Color(0xFF05070F);
-  static const _panelColor = Color(0xDC141A2A);
+  static const _panelColor = Color(0xFF141A2A);
   static const _accent = Color(0xFF5E7BFF);
 
   final _formKey = GlobalKey<FormState>();
@@ -79,15 +79,15 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                           controller: _titleController,
                           decoration: InputDecoration(
                             isDense: true,
-                            labelText: "Name / ناو",
+                            labelText: "Playlist Name",
                             prefixIcon: const Icon(Icons.label_important_outline),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
                             ),
                           ),
                           validator: (value) => requiredValidator(context, value),
@@ -102,11 +102,11 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             prefixIcon: const Icon(Icons.dns_outlined),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.2)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
                             ),
                           ),
                           validator: (value) => requiredValidator(context, value),
@@ -116,7 +116,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                           controller: _usernameController,
                           decoration: InputDecoration(
                             isDense: true,
-                            labelText: "Username / ناوی بەکارهێنەر",
+                            labelText: "Username",
                             prefixIcon: const Icon(Icons.person_outline),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -134,7 +134,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                           controller: _passwordController,
                           decoration: InputDecoration(
                             isDense: true,
-                            labelText: "Password / وشەی نهێنی",
+                            labelText: "Password",
                             prefixIcon: const Icon(Icons.password_outlined),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),

@@ -9,8 +9,8 @@ class SourceSelectionPage extends StatelessWidget {
 
   static const _darkTop = Color(0xFF0B1020);
   static const _darkBottom = Color(0xFF05070F);
-  static const _cardColor = Color(0xDC141A2A);
-  static const _specialCardColor = Color(0xDC303A56);
+  static const _cardColor = Color(0xFF141A2A);
+  static const _specialCardColor = Color(0xFF303A56);
   static const _accent = Color(0xFF5E7BFF);
 
   @override
