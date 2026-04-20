@@ -33,10 +33,20 @@ jobs:
         run: flutter pub get
 
       - name: Build Mobile APK
-        run: flutter build apk --release --flavor mobile --split-per-abi
+        run: |
+          flutter build apk --release --flavor mobile \
+          --split-per-abi \
+          --obfuscate \
+          --split-debug-info=build/app/outputs/symbols \
+          --target-platform android-arm,android-arm64
 
       - name: Build TV APK
-        run: flutter build apk --release --flavor tv --target lib/main_tv.dart --split-per-abi
+        run: |
+          flutter build apk --release --flavor tv --target lib/main_tv.dart \
+          --split-per-abi \
+          --obfuscate \
+          --split-debug-info=build/app/outputs/symbols \
+          --target-platform android-arm,android-arm64
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
