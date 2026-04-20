@@ -15,7 +15,7 @@ class XtreamLoginPage extends StatefulWidget {
 class _XtreamLoginPageState extends State<XtreamLoginPage> {
   static const _darkTop = Color(0xFF0B1020);
   static const _darkBottom = Color(0xFF05070F);
-  static const _panelColor = Color(0x99141A2A);
+  static const _panelColor = Color(0xDC141A2A);
   static const _accent = Color(0xFF5E7BFF);
 
   final _formKey = GlobalKey<FormState>();
@@ -81,7 +81,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             isDense: true,
                             labelText: "Name / ناو",
                             prefixIcon: const Icon(Icons.label_important_outline),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                            ),
                           ),
                           validator: (value) => requiredValidator(context, value),
                         ),
@@ -93,7 +100,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             labelText: "Server URL (Host)",
                             hintText: "http://example.com:8080",
                             prefixIcon: const Icon(Icons.dns_outlined),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                            ),
                           ),
                           validator: (value) => requiredValidator(context, value),
                         ),
@@ -104,7 +118,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             isDense: true,
                             labelText: "Username / ناوی بەکارهێنەر",
                             prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                            ),
                           ),
                           validator: (value) => requiredValidator(context, value),
                         ),
@@ -115,7 +136,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             isDense: true,
                             labelText: "Password / وشەی نهێنی",
                             prefixIcon: const Icon(Icons.password_outlined),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                            ),
                           ),
                           obscureText: true,
                           validator: (value) => requiredValidator(context, value),

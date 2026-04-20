@@ -21,7 +21,7 @@ class M3uLoginPage extends StatefulWidget {
 class _M3uLoginPageState extends State<M3uLoginPage> {
   static const _darkTop = Color(0xFF0B1020);
   static const _darkBottom = Color(0xFF05070F);
-  static const _panelColor = Color(0x99141A2A);
+  static const _panelColor = Color(0xDC141A2A);
   static const _accent = Color(0xFF5E7BFF);
 
   final _formKey = GlobalKey<FormState>();
@@ -103,7 +103,14 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                       isDense: true,
                       labelText: "Name / ناو",
                       prefixIcon: const Icon(Icons.label_important_outline),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        ),
                     ),
                     validator: (value) => requiredValidator(context, value),
                   ),

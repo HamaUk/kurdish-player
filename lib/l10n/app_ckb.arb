@@ -70,5 +70,13 @@
   "onboardingM3uUrl": "زیادکردنی M3U بە بەستەر",
   "onboardingM3uFile": "زیادکردنی M3U بە فایل",
   "onboardingXtream": "زیادکردنی Xtream API",
-  "onboardingSinglePlay": "پەخشکردنی تاقانە (URL)"
+  "onboardingSinglePlay": "پەخشکردنی تاقانە (URL)",
+  "titleEditM3U": "فایلێکی M3U هەڵبژێرە",
+  "liveCreateFormItemLabelUrl": "بەستەری ڕاستەوخۆ (URL)",
+  "liveCreateFormItemHelperUrl": "تەنها سەرچاوەکانی بە شێوەی m3u پشتگیری دەکرێن",
+  "formValidatorRequired": "ئەم خانەیە پێویستە",
+  "formValidatorUrl": "تکایە بەستەرێکی دروست بنووسە",
+  "formValidatorYear": "تکایە ساڵێکی دروست بنووسە",
+  "loginFormItemLabelUsername": "ناوی بەکارهێنەر",
+  "loginFormItemLabelPwd": "وشەی نهێنی"
 }
