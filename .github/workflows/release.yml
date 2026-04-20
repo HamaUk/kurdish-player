@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -35,17 +36,8 @@ jobs:
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
 
-      - name: Download Libraries
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.TOKEN }}
-          run-id: ${{ vars.MEDIA3_RUN_ID }}
-          repository: GhostenEditor/Ghosten-Player
-
-      - name: Move Libraries
-        run: |
-          mkdir android/app/libs
-          mv media3-extension/* android/app/libs
+      - name: Ensure libs directory (Optional)
+        run: mkdir -p android/app/libs
 
       - name: Extract version from tag
         run: |
