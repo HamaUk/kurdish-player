@@ -118,8 +118,8 @@ class MainApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       showPerformanceOverlay: context.watch<UserConfig>().showPerformanceOverlay,
       debugShowCheckedModeBanner: false,
-      theme: getLightTheme(locale),
-      darkTheme: getDarkTheme(locale),
+      theme: getLightTheme(const Locale('en')),
+      darkTheme: getDarkTheme(const Locale('en')),
       themeMode: context.watch<UserConfig>().themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       locale: const Locale('en'),
@@ -128,14 +128,19 @@ class MainApp extends StatelessWidget {
       home: QuitConfirm(child: hasData ? const HomeView() : const SourceSelectionPage()),
       themeAnimationCurve: Curves.easeOut,
       builder:
-          (context, widget) => Directionality(
-            textDirection: TextDirection.ltr,
-            child: Localizations.override(
-              context: context,
-              locale: locale,
-              child: MediaQuery(
-                data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
-                child: widget!,
+          (context, widget) => Localizations.override(
+            context: context,
+            locale: locale,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  textTheme: buildTextTheme(locale, Theme.of(context).textTheme),
+                ),
+                child: MediaQuery(
+                  data: MediaQuery.of(context).scale().copyWith(textScaler: NoScaleTextScaler()),
+                  child: widget!,
+                ),
               ),
             ),
           ),
