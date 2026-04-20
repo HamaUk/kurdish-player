@@ -7,18 +7,21 @@ import 'xtream_login.dart';
 class SourceSelectionPage extends StatelessWidget {
   const SourceSelectionPage({super.key});
 
+  static const _darkTop = Color(0xFF0B1020);
+  static const _darkBottom = Color(0xFF05070F);
+  static const _cardColor = Color(0x99141A2A);
+  static const _specialCardColor = Color(0x99303A56);
+  static const _accent = Color(0xFF5E7BFF);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              Theme.of(context).colorScheme.background,
-            ],
+            colors: [_darkTop, _darkBottom],
           ),
         ),
         child: Center(
@@ -33,7 +36,7 @@ class SourceSelectionPage extends StatelessWidget {
                   AppLocalizations.of(context)!.onboardingTitle,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Colors.white,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -41,7 +44,7 @@ class SourceSelectionPage extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.onboardingSubtitle,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: Colors.white70,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -86,20 +89,15 @@ class SourceSelectionPage extends StatelessWidget {
     required VoidCallback onTap,
     bool isSpecial = false,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
         width: 400,
         decoration: BoxDecoration(
-          color: isSpecial 
-              ? colorScheme.secondaryContainer.withOpacity(0.5) 
-              : colorScheme.surfaceVariant.withOpacity(0.3),
+          color: isSpecial ? _specialCardColor : _cardColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSpecial 
-                ? colorScheme.secondary.withOpacity(0.3) 
-                : colorScheme.outline.withOpacity(0.1),
+            color: isSpecial ? _accent.withOpacity(0.4) : Colors.white10,
           ),
         ),
         child: InkWell(
@@ -112,16 +110,12 @@ class SourceSelectionPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isSpecial 
-                        ? colorScheme.secondary 
-                        : colorScheme.primary.withOpacity(0.1),
+                    color: isSpecial ? _accent : _accent.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     icon,
-                    color: isSpecial 
-                        ? colorScheme.onSecondary 
-                        : colorScheme.primary,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -131,12 +125,13 @@ class SourceSelectionPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
                 Icon(
                   Icons.chevron_right,
-                  color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                  color: Colors.white54,
                 ),
               ],
             ),

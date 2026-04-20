@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
-import '../components/form_group.dart';
 import '../home.dart';
 import '../utils/notification.dart';
 import '../utils/utils.dart';
@@ -20,30 +19,21 @@ class M3uLoginPage extends StatefulWidget {
 }
 
 class _M3uLoginPageState extends State<M3uLoginPage> {
+  static const _darkTop = Color(0xFF0B1020);
+  static const _darkBottom = Color(0xFF05070F);
+  static const _panelColor = Color(0x99141A2A);
+  static const _accent = Color(0xFF5E7BFF);
+
+  final _formKey = GlobalKey<FormState>();
+  late final _titleController = TextEditingController();
   late final _urlController = TextEditingController();
-  late final _formGroup = FormGroupController([
-    FormItem(
-      'title',
-      labelText: "Name / ناو",
-      prefixIcon: Icons.label_important_outline,
-      validator: (value) => requiredValidator(context, value),
-    ),
-    FormItem(
-      'url',
-      labelText: AppLocalizations.of(context)!.liveCreateFormItemLabelUrl,
-      helperText: AppLocalizations.of(context)!.liveCreateFormItemHelperUrl,
-      prefixIcon: Icons.link,
-      controller: _urlController,
-      validator: (value) => urlValidator(context, value, true),
-    ),
-  ]);
 
   bool _loadingPicker = false;
 
   @override
   void dispose() {
+    _titleController.dispose();
     _urlController.dispose();
-    _formGroup.dispose();
     super.dispose();
   }
 
@@ -52,54 +42,101 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
     final isFileMode = widget.mode == M3uLoginMode.file;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.white,
         title: Text(
           isFileMode
               ? AppLocalizations.of(context)!.onboardingM3uFile
               : AppLocalizations.of(context)!.onboardingM3uUrl,
         ),
       ),
-      body: Center(
+      extendBodyBehindAppBar: true,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [_darkTop, _darkBottom],
+          ),
+        ),
+        child: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.only(top: 100, bottom: 24, left: 24, right: 24),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 520),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isFileMode)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: FilledButton.icon(
-                        onPressed: _loadingPicker ? null : _pickM3uFile,
-                        icon:
-                            _loadingPicker
-                                ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                                : const Icon(Icons.folder_open_rounded),
-                        label: Text(AppLocalizations.of(context)!.titleEditM3U),
+            child: Container(
+              decoration: BoxDecoration(
+                color: _panelColor,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white10),
+              ),
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                  if (isFileMode)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: FilledButton.icon(
+                          onPressed: _loadingPicker ? null : _pickM3uFile,
+                          style: FilledButton.styleFrom(backgroundColor: _accent),
+                          icon:
+                              _loadingPicker
+                                  ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                  : const Icon(Icons.folder_open_rounded),
+                          label: Text(AppLocalizations.of(context)!.titleEditM3U),
+                        ),
                       ),
                     ),
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      labelText: "Name / ناو",
+                      prefixIcon: const Icon(Icons.label_important_outline),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    validator: (value) => requiredValidator(context, value),
                   ),
-                SizedBox(height: 280, child: FormGroup(controller: _formGroup)),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: FilledButton.icon(
-                    onPressed: () => _submit(context),
-                    icon: const Icon(Icons.check),
-                    label: Text(AppLocalizations.of(context)!.buttonSubmit),
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    controller: _urlController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      labelText: AppLocalizations.of(context)!.liveCreateFormItemLabelUrl,
+                      helperText: AppLocalizations.of(context)!.liveCreateFormItemHelperUrl,
+                      prefixIcon: const Icon(Icons.link),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    validator: (value) => urlValidator(context, value, true),
                   ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: FilledButton.icon(
+                      style: FilledButton.styleFrom(backgroundColor: _accent),
+                      onPressed: () => _submit(context),
+                      icon: const Icon(Icons.check),
+                      label: Text(AppLocalizations.of(context)!.buttonSubmit),
+                    ),
+                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
+      ),
       ),
     );
   }
@@ -124,10 +161,10 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
   }
 
   Future<void> _submit(BuildContext context) async {
-    if (!_formGroup.validate()) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
     final resp = await showNotification(
       context,
-      Api.playlistInsert(_formGroup.data['url'], _formGroup.data['title']),
+      Api.playlistInsert(_urlController.text.trim(), _titleController.text.trim()),
     );
     if (resp?.error == null && context.mounted) {
       Navigator.of(

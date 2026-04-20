@@ -2,7 +2,6 @@ import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
-import '../components/form_group.dart';
 import '../utils/notification.dart';
 import '../home.dart';
 
@@ -14,38 +13,23 @@ class XtreamLoginPage extends StatefulWidget {
 }
 
 class _XtreamLoginPageState extends State<XtreamLoginPage> {
-  late final _formGroup = FormGroupController([
-    FormItem(
-      'title',
-      labelText: "Name / ناو",
-      prefixIcon: Icons.label_important_outline,
-      validator: (value) => requiredValidator(context, value),
-    ),
-    FormItem(
-      'host',
-      labelText: "Server URL (Host)",
-      hintText: "http://example.com:8080",
-      prefixIcon: Icons.dns_outlined,
-      validator: (value) => requiredValidator(context, value),
-    ),
-    FormItem(
-      'username',
-      labelText: "Username / ناوی بەکارهێنەر",
-      prefixIcon: Icons.person_outline,
-      validator: (value) => requiredValidator(context, value),
-    ),
-    FormItem(
-      'password',
-      labelText: "Password / وشەی نهێنی",
-      prefixIcon: Icons.password_outlined,
-      obscureText: true,
-      validator: (value) => requiredValidator(context, value),
-    ),
-  ]);
+  static const _darkTop = Color(0xFF0B1020);
+  static const _darkBottom = Color(0xFF05070F);
+  static const _panelColor = Color(0x99141A2A);
+  static const _accent = Color(0xFF5E7BFF);
+
+  final _formKey = GlobalKey<FormState>();
+  late final _titleController = TextEditingController();
+  late final _hostController = TextEditingController();
+  late final _usernameController = TextEditingController();
+  late final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _formGroup.dispose();
+    _titleController.dispose();
+    _hostController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -56,18 +40,15 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
         title: Text(AppLocalizations.of(context)!.onboardingXtream),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).colorScheme.primary.withOpacity(0.05),
-              Theme.of(context).colorScheme.background,
-            ],
+            colors: [_darkTop, _darkBottom],
           ),
         ),
         child: Center(
@@ -76,11 +57,9 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 500),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+                color: _panelColor,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                ),
+                border: Border.all(color: Colors.white10),
               ),
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -89,18 +68,67 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                   Icon(
                     Icons.cloud_download_rounded,
                     size: 64,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: _accent,
                   ),
                   const SizedBox(height: 24),
-                  SizedBox(
-                    height: 360,
-                    child: FormGroup(controller: _formGroup),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelText: "Name / ناو",
+                            prefixIcon: const Icon(Icons.label_important_outline),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          validator: (value) => requiredValidator(context, value),
+                        ),
+                        const SizedBox(height: 18),
+                        TextFormField(
+                          controller: _hostController,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelText: "Server URL (Host)",
+                            hintText: "http://example.com:8080",
+                            prefixIcon: const Icon(Icons.dns_outlined),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          validator: (value) => requiredValidator(context, value),
+                        ),
+                        const SizedBox(height: 18),
+                        TextFormField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelText: "Username / ناوی بەکارهێنەر",
+                            prefixIcon: const Icon(Icons.person_outline),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          validator: (value) => requiredValidator(context, value),
+                        ),
+                        const SizedBox(height: 18),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelText: "Password / وشەی نهێنی",
+                            prefixIcon: const Icon(Icons.password_outlined),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          obscureText: true,
+                          validator: (value) => requiredValidator(context, value),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: FilledButton.icon(
+                      style: FilledButton.styleFrom(backgroundColor: _accent),
                       onPressed: () => _onSubmit(context),
                       icon: const Icon(Icons.login),
                       label: Text(
@@ -119,11 +147,11 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
   }
 
   Future<void> _onSubmit(BuildContext context) async {
-    if (_formGroup.validate()) {
-      final host = _formGroup.data['host'].toString().trim();
-      final user = _formGroup.data['username'].toString().trim();
-      final pass = _formGroup.data['password'].toString().trim();
-      final title = _formGroup.data['title'].toString().trim();
+    if (_formKey.currentState?.validate() ?? false) {
+      final host = _hostController.text.trim();
+      final user = _usernameController.text.trim();
+      final pass = _passwordController.text.trim();
+      final title = _titleController.text.trim();
 
       // Construct Xtream M3U Plus URL
       final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
