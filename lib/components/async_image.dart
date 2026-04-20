@@ -2,6 +2,7 @@ import 'package:api/api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../const.dart';
 import '../utils/utils.dart';
 import '../views/image_viewer.dart';
 
