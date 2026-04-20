@@ -1,4 +1,5 @@
 {
+  "@@locale": "ckb",
   "accountCreateFormItemLabelClientId": "بەستەری کلاینت",
   "accountCreateFormItemLabelClientPwd": "وشەی نهێنی کلاینت",
   "accountCreateFormItemLabelOauthUrl": "بەستەری OAuth",

@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "accountCreateFormItemLabelClientId": "Client ID",
   "accountCreateFormItemLabelClientPwd": "Client Password",
   "accountCreateFormItemLabelOauthUrl": "OAuth Url",
