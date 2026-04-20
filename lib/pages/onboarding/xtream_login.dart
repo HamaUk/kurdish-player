@@ -92,7 +92,10 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 24),
-                  FormGroup(controller: _formGroup),
+                  SizedBox(
+                    height: 360,
+                    child: FormGroup(controller: _formGroup),
+                  ),
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity,

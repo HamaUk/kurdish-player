@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/logo.dart';
 import '../../l10n/app_localizations.dart';
-import '../../utils/utils.dart';
-import '../home.dart';
-import '../media/dialogs/live_edit.dart';
-import '../media/live_list.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../theme.dart';
+import 'm3u_login.dart';
 import 'xtream_login.dart';
 
 class SourceSelectionPage extends StatelessWidget {
@@ -152,22 +147,19 @@ class SourceSelectionPage extends StatelessWidget {
   }
 
   Future<void> _addM3uUrl(BuildContext context) async {
-    final flag = await showDialog<bool>(
-      context: context, 
-      builder: (context) => const LiveEditPage()
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const M3uLoginPage(mode: M3uLoginMode.url),
+      ),
     );
-    if (flag == true && context.mounted) {
-       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeView()),
-          (route) => false,
-        );
-    }
   }
 
   Future<void> _addM3uFile(BuildContext context) async {
-    // For M3U file, we open the dialog but we can improve this later to trigger the picker immediately
-    // For now, let's fix the dialog crash first
-    _addM3uUrl(context);
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const M3uLoginPage(mode: M3uLoginMode.file),
+      ),
+    );
   }
 
   Future<void> _addXtream(BuildContext context) async {
