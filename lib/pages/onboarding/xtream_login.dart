@@ -80,25 +80,25 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                               children: [
                                 TextFormField(
                                   controller: _titleController,
-                                  decoration: _inputDecoration(context, "Playlist Name", Icons.label_important_outline),
+                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName, Icons.label_important_outline),
                                   validator: (value) => requiredValidator(context, value),
                                 ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
                                 const SizedBox(height: 18),
                                 TextFormField(
                                   controller: _hostController,
-                                  decoration: _inputDecoration(context, "Server URL (Host)", Icons.dns_outlined, hint: "http://example.com:8080"),
+                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.serverFormItemLabelServer, Icons.dns_outlined, hint: "http://example.com:8080"),
                                   validator: (value) => requiredValidator(context, value),
                                 ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
                                 const SizedBox(height: 18),
                                 TextFormField(
                                   controller: _usernameController,
-                                  decoration: _inputDecoration(context, "Username", Icons.person_outline),
+                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelUsername, Icons.person_outline),
                                   validator: (value) => requiredValidator(context, value),
                                 ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
                                 const SizedBox(height: 18),
                                 TextFormField(
                                   controller: _passwordController,
-                                  decoration: _inputDecoration(context, "Password", Icons.password_outlined),
+                                  decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelPwd, Icons.password_outlined),
                                   obscureText: true,
                                   validator: (value) => requiredValidator(context, value),
                                 ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),

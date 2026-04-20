@@ -116,7 +116,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _titleController,
-                              decoration: _inputDecoration(context, "Playlist Name"),
+                              decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName),
                               validator: (value) => requiredValidator(context, value),
                             ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, duration: 400.ms),
                             const SizedBox(height: 16),

@@ -4,8 +4,8 @@ import '../../components/error_message.dart';
 import '../../components/gap.dart';
 import '../../l10n/app_localizations.dart';
 
-const _errorIcon = Icon(Icons.error_outline, size: 60, color: Colors.red);
-const _successIcon = Icon(Icons.check_circle_outline, size: 60, color: Colors.green);
+const _errorIcon = Icon(Icons.error_rounded, size: 60, color: Color(0xFFFF5252));
+const _successIcon = Icon(Icons.check_circle_rounded, size: 60, color: Color(0xFF4CAF50));
 
 class NotificationResponse<T> {
   const NotificationResponse({this.data, this.error});
@@ -97,7 +97,12 @@ Future<NotificationResponse<T?>?> showNotification<T>(
     context: context,
     builder:
         (_) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.modalTitleNotification),
+          backgroundColor: const Color(0xFF141A2A),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: Text(
+            AppLocalizations.of(context)!.modalTitleNotification,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           content: FutureBuilder<T?>(
             future: future,
             builder:
@@ -126,7 +131,12 @@ Future<bool?> showConfirm(BuildContext context, String confirmText) async {
     context: context,
     builder:
         (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.modalTitleConfirm),
+          backgroundColor: const Color(0xFF141A2A),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: Text(
+            AppLocalizations.of(context)!.modalTitleConfirm,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           content: Text(confirmText),
           actions: [
             FilledButton(
@@ -154,7 +164,12 @@ Future<NotificationResponse<T?>?> showProgressNotification<T>(
     context: context,
     builder:
         (_) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.modalTitleNotification),
+          backgroundColor: const Color(0xFF141A2A),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: Text(
+            AppLocalizations.of(context)!.modalTitleNotification,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           content: StreamBuilder(
             stream: stream,
             builder:
