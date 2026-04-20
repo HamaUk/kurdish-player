@@ -59,18 +59,19 @@ class AsyncImage extends StatelessWidget {
                 ? httpHeaders ?? const {'referer': 'https://www.themoviedb.org/'}
                 : httpHeaders,
         errorListener: (_) {},
-        errorWidget:
-            errorWidget ??
-            (context, url, error) =>
-                showErrorWidget
-                    ? Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        size: errorIconSize,
-                        color: Theme.of(context).colorScheme.error.withAlpha(0x33),
-                      ),
-                    )
-                    : const SizedBox(),
+        errorWidget: (context, url, error) {
+          if (errorWidget != null) return errorWidget!(context, url, error);
+          if (!showErrorWidget) return const SizedBox();
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Opacity(
+                opacity: 0.5,
+                child: Image.asset(assetsLogo, width: errorIconSize, height: errorIconSize, fit: BoxFit.contain),
+              ),
+            ),
+          );
+        },
         placeholder: (context, _) => needLoading ? const _AnimatedLoading() : const SizedBox(),
         imageBuilder:
             ink
