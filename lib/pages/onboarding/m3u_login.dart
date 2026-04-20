@@ -86,7 +86,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Align(
-                              alignment: Alignment.centerRight,
+                              alignment: AlignmentDirectional.centerEnd,
                               child: FilledButton.icon(
                                 onPressed: _loadingPicker ? null : _pickM3uFile,
                                 style: FilledButton.styleFrom(backgroundColor: _accent),
@@ -101,7 +101,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                               ),
                             ),
                           ),
-                        const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
+                        const Logo(size: 140),
                         const SizedBox(height: 24),
                         Text(
                           isFileMode
@@ -111,19 +111,19 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
-                        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
+                        ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _titleController,
                           decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName),
                           validator: (value) => requiredValidator(context, value),
-                        ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.2, duration: 400.ms),
+                        ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _urlController,
                           decoration: _inputDecoration(context, AppLocalizations.of(context)!.liveCreateFormItemLabelUrl),
                           validator: (value) => urlValidator(context, value, true),
-                        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, duration: 400.ms),
+                        ),
                         const SizedBox(height: 24),
                         SizedBox(
                           width: double.infinity,
@@ -141,7 +141,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, duration: 400.ms),
+                        ),
                       ],
                     ),
                   ),

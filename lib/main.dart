@@ -59,7 +59,34 @@ void main(List<String> args) async {
         }
       });
     }
-    final playlists = await Api.playlistQueryAll(); final drivers = await Api.driverQueryAll(); final hasData = playlists.isNotEmpty || drivers.isNotEmpty; runApp(ChangeNotifierProvider(create: (_) => userConfig, child: MainApp(hasData: hasData)));
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          backgroundColor: const Color(0xFF141A2A),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: SelectableText(
+                "UI ERROR:\n${details.exception}\n\nStack:\n${details.stack}",
+                style: const TextStyle(color: Colors.redAccent, fontSize: 13, fontFamily: 'monospace'),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      );
+    };
+
+    final playlists = await Api.playlistQueryAll();
+    final drivers = await Api.driverQueryAll();
+    final hasData = playlists.isNotEmpty || drivers.isNotEmpty;
+    runApp(
+      ChangeNotifierProvider(
+        create: (_) => userConfig,
+        child: MainApp(hasData: hasData),
+      ),
+    );
     PlatformApi.deeplinkEvent.listen(scanToLogin);
   } else {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

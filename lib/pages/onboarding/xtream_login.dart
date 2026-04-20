@@ -71,7 +71,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Logo(size: 140).animate().fadeIn().scale(delay: 100.ms),
+                      const Logo(size: 140),
                       const SizedBox(height: 24),
                       Form(
                         key: _formKey,
@@ -81,26 +81,26 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                               controller: _titleController,
                               decoration: _inputDecoration(context, AppLocalizations.of(context)!.buttonName, Icons.label_important_outline),
                               validator: (value) => requiredValidator(context, value),
-                            ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.1),
+                            ),
                             const SizedBox(height: 18),
                             TextFormField(
                               controller: _hostController,
                               decoration: _inputDecoration(context, AppLocalizations.of(context)!.serverFormItemLabelServer, Icons.dns_outlined, hint: "http://example.com:8080"),
                               validator: (value) => requiredValidator(context, value),
-                            ).animate().fadeIn(delay: 300.ms).slideX(begin: -0.1),
+                            ),
                             const SizedBox(height: 18),
                             TextFormField(
                               controller: _usernameController,
                               decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelUsername, Icons.person_outline),
                               validator: (value) => requiredValidator(context, value),
-                            ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
+                            ),
                             const SizedBox(height: 18),
                             TextFormField(
                               controller: _passwordController,
                               decoration: _inputDecoration(context, AppLocalizations.of(context)!.loginFormItemLabelPwd, Icons.password_outlined),
                               obscureText: true,
                               validator: (value) => requiredValidator(context, value),
-                            ).animate().fadeIn(delay: 500.ms).slideX(begin: -0.1),
+                            ),
                           ],
                         ),
                       ),
@@ -122,7 +122,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.8, 0.8)),
+                      ),
                     ],
                   ),
                 ),
