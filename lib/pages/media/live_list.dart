@@ -95,6 +95,9 @@ class _LiveListPageState extends State<LiveListPage> {
           );
         },
       ),
+    );
+  }
+
   Future<void> _addPlaylist(BuildContext context) async {
     final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
     if (flag == true && context.mounted) context.read<IptvCubit>().update();
