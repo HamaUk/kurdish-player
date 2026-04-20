@@ -261,4 +261,177 @@ class AppLocalizationsCkb extends AppLocalizationsEn {
   @override
   String get loginFormItemLabelPwd => 'وشەی نهێنی';
 
+  @override
+  String get buttonMarkFavorite => 'زیادکردن بۆ دڵخوازەکان';
+
+  @override
+  String get buttonUnmarkFavorite => 'سڕینەوە لە دڵخوازەکان';
+
+  @override
+  String get buttonMarkPlayed => 'نیشانەکردن وەک بینراو';
+
+  @override
+  String get buttonMarkNotPlayed => 'نیشانەکردن وەک نەبینراو';
+
+  @override
+  String get buttonShuffle => 'تێکەڵکردن';
+
+  @override
+  String get buttonSkipFromStart => 'بازدان لە پێشەکی';
+
+  @override
+  String get buttonSkipFromEnd => 'بازدان لە کۆتایی';
+
+  @override
+  String get deleteAccountConfirmText => 'ئایا دەتەوێت ئەم سەرچاوەیە بسڕیتەوە؟';
+
+  @override
+  String get deleteAccountTip => 'سڕینەوەی ئەم هەژمارە هەموو میدیاکان دەسڕێتەوە، ئایا دڵنیای؟';
+
+  @override
+  String get deletePlaylistTip => 'سڕینەوەی لیستی پەخش هەموو کەناڵەکانی دەسڕێتەوە';
+
+  @override
+  String get errorLoadData => 'بارکردنی داتا سەرکەوتوو نەبوو';
+
+  @override
+  String get filePropertyFilename => 'ناوی فایل';
+
+  @override
+  String get filePropertySize => 'قەبارەی فایل';
+
+  @override
+  String get filePropertyCreateAt => 'کاتی دروستکردن';
+
+  @override
+  String get filePropertyUpdateAt => 'کاتی نوێکردنەوە';
+
+  @override
+  String get formLabelTitle => 'ناونیشان';
+
+  @override
+  String get formLabelYear => 'ساڵ';
+
+  @override
+  String get formLabelPlot => 'چیرۆک';
+
+  @override
+  String get formLabelRuntime => 'ماوە';
+
+  @override
+  String get formLabelLanguage => 'زمان';
+
+  @override
+  String get homeTabBrowser => 'گەڕان';
+
+  @override
+  String get isLatestVersion => 'ئێستا نوێترین وەشان بەکاردێنیت';
+
+  @override
+  String latestVersion(String version) => 'وەشانی نوێ: V$version';
+
+  @override
+  String get playerVideoClarity => 'کوالێتی ڤیدیۆ';
+
+  @override
+  String get searchFilterTitle => 'فیلتەرەکان';
+
+  @override
+  String get settingsItemLanguage => 'زمانی سیستم';
+
+  @override
+  String get settingsItemTheme => 'ڕووکار';
+
+  @override
+  String get settingsItemPlayerKernel => 'ناوەڕۆکی پەخشکەر';
+
+  @override
+  String get settingsItemDataReset => 'پاککردنەوەی داتا';
+
+  @override
+  String get settingsItemHelp => 'یارمەتی';
+
+  @override
+  String get settingsItemFeedback => 'فیدباک';
+
+  @override
+  String get settingsItemInfo => 'زانیاری';
+
+  @override
+  String get tagFavorite => 'دڵخوازەکان';
+
+  @override
+  String get tagNew => 'نوێ';
+
+  @override
+  String get tagShowMore => 'پیشاندانی پتر';
+
+  @override
+  String get tagShowLess => 'پیشاندانی کەمتر';
+
+  @override
+  String get titleCasts => 'ئەکتەرەکان';
+
+  @override
+  String get titleGenres => 'ژانەرەکان';
+
+  @override
+  String get titleNext => 'دواتر';
+
+  @override
+  String unitSecond(num time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      time,
+      locale: localeName,
+      one: '١ چرکە',
+      other: '$time چرکە',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitMinute(num time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      time,
+      locale: localeName,
+      one: '١ خولەک',
+      other: '$time خولەک',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitHour(num time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      time,
+      locale: localeName,
+      one: '١ کاتژمێر',
+      other: '$time کاتژمێر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitDay(num time) {
+    String _temp0 = intl.Intl.pluralLogic(
+      time,
+      locale: localeName,
+      one: '١ ڕۆژ',
+      other: '$time ڕۆژ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get videoSettingsVideo => 'ڤیدیۆ';
+
+  @override
+  String get videoSettingsAudio => 'دەنگ';
+
+  @override
+  String get videoSettingsSubtitle => 'ژێرنووس';
+
+  @override
+  String get videoSettingsSpeeding => 'خێرایی';
+
 }
