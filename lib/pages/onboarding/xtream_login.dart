@@ -1,6 +1,7 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../components/logo.dart';
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
 import '../utils/notification.dart';
