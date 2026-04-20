@@ -67,6 +67,8 @@ class _FormGroupState extends State<FormGroup> {
     return Form(
       key: widget.controller.formKey,
       child: ListView.separated(
+        shrinkWrap: true,
+        physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         itemBuilder: (context, index) {
           final item = widget.controller.items[index];
@@ -78,8 +80,9 @@ class _FormGroupState extends State<FormGroup> {
               labelText: item.labelText,
               helperText: item.helperText,
               hintText: item.hintText,
-              prefixIcon: Icon(item.prefixIcon),
+              prefixIcon: item.prefixIcon != null ? Icon(item.prefixIcon) : null,
               suffixIcon: item.suffixIcon,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             ),
             minLines: 1,
             maxLines: item.maxLines,

@@ -64,7 +64,7 @@ class _LiveEditPageState extends State<LiveEditPage> {
       title: Text(
         widget.item == null ? AppLocalizations.of(context)!.pageTitleAdd : AppLocalizations.of(context)!.pageTitleEdit,
       ),
-      content: SizedBox(width: 600, height: 160, child: FormGroup(controller: _formGroup)),
+      content: SizedBox(width: 600, height: 240, child: FormGroup(controller: _formGroup)),
       actions: [
         IconButton(icon: const Icon(Icons.check), onPressed: () => _onSubmit(context)),
         IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),

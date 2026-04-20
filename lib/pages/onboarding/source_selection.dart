@@ -61,7 +61,7 @@ class SourceSelectionPage extends StatelessWidget {
                   context,
                   icon: Icons.file_present_rounded,
                   title: AppLocalizations.of(context)!.onboardingM3uFile,
-                  onTap: () => _addM3uUrl(context),
+                  onTap: () => _addM3uFile(context),
                 ),
                 _buildSourceOption(
                   context,
@@ -73,7 +73,7 @@ class SourceSelectionPage extends StatelessWidget {
                   context,
                   icon: Icons.play_circle_fill_rounded,
                   title: AppLocalizations.of(context)!.onboardingSinglePlay,
-                  onTap: () => _singlePlay(context),
+                  onTap: () => _addM3uUrl(context),
                   isSpecial: true,
                 ),
               ],
@@ -91,42 +91,42 @@ class SourceSelectionPage extends StatelessWidget {
     required VoidCallback onTap,
     bool isSpecial = false,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: Material(
-        color: Colors.transparent,
+      child: Container(
+        width: 400,
+        decoration: BoxDecoration(
+          color: isSpecial 
+              ? colorScheme.secondaryContainer.withOpacity(0.5) 
+              : colorScheme.surfaceVariant.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSpecial 
+                ? colorScheme.secondary.withOpacity(0.3) 
+                : colorScheme.outline.withOpacity(0.1),
+          ),
+        ),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 400,
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-            decoration: BoxDecoration(
-              color: isSpecial 
-                  ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.5) 
-                  : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isSpecial 
-                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.3) 
-                    : Theme.of(context).colorScheme.outline.withOpacity(0.1),
-              ),
-            ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isSpecial 
-                        ? Theme.of(context).colorScheme.secondary 
-                        : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        ? colorScheme.secondary 
+                        : colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     icon,
                     color: isSpecial 
-                        ? Theme.of(context).colorScheme.onSecondary 
-                        : Theme.of(context).colorScheme.primary,
+                        ? colorScheme.onSecondary 
+                        : colorScheme.primary,
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -141,7 +141,7 @@ class SourceSelectionPage extends StatelessWidget {
                 ),
                 Icon(
                   Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                  color: colorScheme.onSurfaceVariant.withOpacity(0.5),
                 ),
               ],
             ),
@@ -152,7 +152,10 @@ class SourceSelectionPage extends StatelessWidget {
   }
 
   Future<void> _addM3uUrl(BuildContext context) async {
-    final flag = await showDialog(context: context, builder: (context) => const LiveEditPage());
+    final flag = await showDialog<bool>(
+      context: context, 
+      builder: (context) => const LiveEditPage()
+    );
     if (flag == true && context.mounted) {
        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const HomeView()),
@@ -161,14 +164,15 @@ class SourceSelectionPage extends StatelessWidget {
     }
   }
 
+  Future<void> _addM3uFile(BuildContext context) async {
+    // For M3U file, we open the dialog but we can improve this later to trigger the picker immediately
+    // For now, let's fix the dialog crash first
+    _addM3uUrl(context);
+  }
+
   Future<void> _addXtream(BuildContext context) async {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const XtreamLoginPage()),
     );
-  }
-
-  void _singlePlay(BuildContext context) {
-    // For single play we can also use the LiveEdit dialog for now
-    _addM3uUrl(context);
   }
 }
