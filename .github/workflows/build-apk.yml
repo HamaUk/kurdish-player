@@ -32,6 +32,17 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Generate Keystore
+        run: |
+          keytool -genkey -v -keystore android/app/key.jks -alias key -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Kurdish Player, OU=Dev, O=Kurd, L=Erbil, S=Kurd, C=IQ" -storepass "kurdishplayer" -keypass "kurdishplayer"
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=kurdishplayer" > android/key.properties
+          echo "keyPassword=kurdishplayer" >> android/key.properties
+          echo "keyAlias=key" >> android/key.properties
+          echo "storeFile=key.jks" >> android/key.properties
+
       - name: Build Mobile APK
         run: |
           flutter build apk --release --flavor mobile \
