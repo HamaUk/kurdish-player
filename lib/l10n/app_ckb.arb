@@ -291,5 +291,17 @@
   "pageTitleCreateMovieLibrary": "دروستکردنی کتێبخانەی فیلم",
   "pageTitleCreateTVLibrary": "دروستکردنی کتێبخانەی زنجیرە",
   "sponsorMessage": "پەرەپێدان و چاکسازی ئاسان نییە، ئەگەر ئەم پڕۆژەیەت بە سوود زانی پشتگیریمان بکە",
-  "sponsorTipMessage": "ئەگەر هەر کەمکورتییەک هەبوو لە گیت-هەب ئاگادارمان بکە"
+  "sponsorTipMessage": "ئەگەر هەر کەمکورتییەک هەبوو لە گیت-هەب ئاگادارمان بکە",
+  "buttonSaveMediaInfoToDriver": "پاشەکەوتکردنی زانیاری میدیا بۆ درایڤ",
+  "buttonScraperLibrary": "گەڕان لە کتێبخانەی میدیا",
+  "buttonScraperMediaInfo": "گەڕان بۆ زانیاری میدیا",
+  "dataSyncConfirmSync": "ئایا دەتەوێت داتاکانی ئامێری \"{device}\" هاوکات بکەیت بۆ ئەم ئامێرە؟",
+  "dataSyncTipOutOfDate": "وەشانی ئەپی ئامێری \"{device}\" زۆر کۆنە و نوێ ناکرێتەوە، تکایە نوێی بکەرەوە.",
+  "deleteMediaGroupConfirmText": "سڕینەوەی کتێبخانەی میدیا هەموو میدیاکان دەسڕێتەوە (بەڵام فایلەکان لە درایڤەکەدا ناسڕدرێنەوە)، ئایا دڵنیای؟",
+  "playerAlipanVideoClarityTip": "کوالێتی ڤیدیۆ هەڵبژێرە، ڤیدیۆکە تێکەڵ دەکرێت و دەگوشرێت. ئەگەر پەخشکردن وەستا یان جۆری فایلەکە پشتگیری نەکرا، دەتوانیت کوالێتی دیاری بکەیت. ئەگەر دەتەوێت فایلی ڕەسەن پەخش بکەیت، 'هیچ' هەڵبژێرە.",
+  "playerOpenFileWithParallelThreads": "کردنەوەی فایل بە چەند بەشێکی هاوتەریب",
+  "playerParallelsCount": "ژمارەی بەشە هاوتەریبەکان",
+  "playerSliceSize": "قەبارەی بڕگەکان",
+  "playerUseHardwareCodec": "بەکارهێنانی کۆدکەری ڕەقامێر",
+  "subtitleFormItemLabelUrl": "بەستەر (URL)"
 }
