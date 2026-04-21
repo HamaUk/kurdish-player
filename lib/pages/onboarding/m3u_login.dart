@@ -48,6 +48,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        foregroundColor: theme.brightness == Brightness.dark ? Colors.white : Colors.black,
         title: Text(
           isFileMode ? l10n.onboardingM3uFile : l10n.onboardingM3uUrl,
           style: const TextStyle(fontWeight: FontWeight.bold),

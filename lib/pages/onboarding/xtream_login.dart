@@ -44,6 +44,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
         title: Text(l10n.onboardingXtream, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        foregroundColor: theme.brightness == Brightness.dark ? Colors.white : Colors.black,
       ),
       body: Stack(
         children: [
