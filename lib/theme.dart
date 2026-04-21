@@ -71,13 +71,14 @@ ThemeData getLightTheme(Locale locale) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.transparent,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.black12)),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.black12)),
+      fillColor: Colors.black.withOpacity(0.04),
+      isDense: true,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.black26)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.black26)),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.primary, width: 2)),
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.error, width: 1.5)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+      labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
@@ -128,13 +129,14 @@ ThemeData getDarkTheme(Locale locale) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.transparent,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white12)),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white12)),
+      fillColor: Colors.white.withOpacity(0.08),
+      isDense: true,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white38)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white38)),
       focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.primary, width: 2)),
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.error, width: 1.5)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+      labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
