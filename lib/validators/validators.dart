@@ -19,6 +19,16 @@ String? requiredValidator(BuildContext context, String? value) {
   return null;
 }
 
+/// Trims and removes characters that often break pasted URLs in RTL layouts
+/// (LRM/RLM/PDF and similar) without changing visible Latin text.
+String sanitizeUrlInput(String raw) {
+  var s = raw.trim();
+  if (s.isEmpty) return s;
+  if (s.startsWith('\uFEFF')) s = s.substring(1);
+  s = s.replaceAll(RegExp(r'[\u200e\u200f\u202a-\u202e\u2066-\u2069]'), '');
+  return s.trim();
+}
+
 bool _isValidHttpLikeUrl(String candidate) {
   final uri = Uri.tryParse(candidate);
   if (uri == null || !uri.hasScheme) return false;
@@ -30,7 +40,7 @@ bool _isValidHttpLikeUrl(String candidate) {
 /// Normalizes playlist URL input after it has passed [urlValidator].
 /// Adds `https://` when the user omitted the scheme (e.g. `example.com/list.m3u`).
 String normalizeHttpUrlForFetch(String raw) {
-  final t = raw.trim();
+  final t = sanitizeUrlInput(raw);
   if (t.isEmpty) return t;
   if (RegExp(r'^driver?://').hasMatch(t)) return t;
   if (!t.contains('://')) {
@@ -45,7 +55,7 @@ String? urlValidator(BuildContext context, String? value, [bool required = false
   }
   if (value == null || value.isEmpty) return null;
 
-  final trimmedValue = value.trim();
+  final trimmedValue = sanitizeUrlInput(value);
   if (RegExp(r'^driver?://(\d{1,3})(/\S*)?$').hasMatch(trimmedValue)) {
     return null;
   }
