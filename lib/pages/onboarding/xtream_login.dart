@@ -41,7 +41,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: const BackButton(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         title: Text(l10n.onboardingXtream, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -134,7 +141,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     controller: _titleController,
                                     decoration: InputDecoration(
                                       labelText: l10n.buttonName,
-                                      prefixIcon: const Icon(Icons.label_important_outline),
+                                      prefixIcon: const Icon(Icons.label),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
@@ -144,7 +151,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     decoration: InputDecoration(
                                       labelText: l10n.serverFormItemLabelServer,
                                       hintText: "http://example.com:8080",
-                                      prefixIcon: const Icon(Icons.dns_outlined),
+                                      prefixIcon: const Icon(Icons.dns),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
@@ -153,7 +160,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     controller: _usernameController,
                                     decoration: InputDecoration(
                                       labelText: l10n.loginFormItemLabelUsername,
-                                      prefixIcon: const Icon(Icons.person_outline),
+                                      prefixIcon: const Icon(Icons.person),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
@@ -162,7 +169,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     controller: _passwordController,
                                     decoration: InputDecoration(
                                       labelText: l10n.loginFormItemLabelPwd,
-                                      prefixIcon: const Icon(Icons.password_outlined),
+                                      prefixIcon: const Icon(Icons.lock),
                                     ),
                                     obscureText: true,
                                     validator: (value) => requiredValidator(context, value),

@@ -46,7 +46,14 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: const BackButton(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: theme.brightness == Brightness.dark ? Colors.white : Colors.black,
@@ -141,7 +148,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 controller: _titleController,
                                 decoration: InputDecoration(
                                   labelText: l10n.buttonName,
-                                  prefixIcon: const Icon(Icons.drive_file_rename_outline),
+                                  prefixIcon: const Icon(Icons.edit),
                                 ),
                                 validator: (value) => requiredValidator(context, value),
                               ),
@@ -150,7 +157,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 controller: _urlController,
                                 decoration: InputDecoration(
                                   labelText: isFileMode ? l10n.titleEditM3U : l10n.liveCreateFormItemLabelUrl,
-                                  prefixIcon: Icon(isFileMode ? Icons.file_present : Icons.link),
+                                  prefixIcon: Icon(isFileMode ? Icons.insert_drive_file : Icons.link),
                                   suffixIcon: isFileMode 
                                       ? IconButton(
                                           onPressed: _loadingPicker ? null : _pickM3uFile,
