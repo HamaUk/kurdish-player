@@ -207,9 +207,20 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
   }
 
   Future<void> _submit(BuildContext context) async {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
 
-    String url = _urlController.text.trim();
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      if (!context.mounted) return;
+      final msg = _titleController.text.trim().isEmpty ? l10n.formValidatorRequired : l10n.formValidatorUrl;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(behavior: SnackBarBehavior.floating, content: Text(msg)),
+      );
+      setState(() {});
+      return;
+    }
+
+    String url = normalizeHttpUrlForFetch(_urlController.text.trim());
 
     final resp = await showNotification(
       context,

@@ -19,6 +19,26 @@ String? requiredValidator(BuildContext context, String? value) {
   return null;
 }
 
+bool _isValidHttpLikeUrl(String candidate) {
+  final uri = Uri.tryParse(candidate);
+  if (uri == null || !uri.hasScheme) return false;
+  if (uri.scheme != 'http' && uri.scheme != 'https') return false;
+  if (uri.host.isEmpty) return false;
+  return true;
+}
+
+/// Normalizes playlist URL input after it has passed [urlValidator].
+/// Adds `https://` when the user omitted the scheme (e.g. `example.com/list.m3u`).
+String normalizeHttpUrlForFetch(String raw) {
+  final t = raw.trim();
+  if (t.isEmpty) return t;
+  if (RegExp(r'^driver?://').hasMatch(t)) return t;
+  if (!t.contains('://')) {
+    return 'https://$t';
+  }
+  return t;
+}
+
 String? urlValidator(BuildContext context, String? value, [bool required = false]) {
   if (required && (value == null || value.isEmpty)) {
     return AppLocalizations.of(context)!.formValidatorRequired;
@@ -26,11 +46,20 @@ String? urlValidator(BuildContext context, String? value, [bool required = false
   if (value == null || value.isEmpty) return null;
 
   final trimmedValue = value.trim();
-  if (RegExp(r'^https?://[a-zA-Z0-9\-.]+\.[a-zA-Z0-9\-.]{2,}(:[0-9]{1,5})?(/\S*)?$').hasMatch(trimmedValue)) {
+  if (RegExp(r'^driver?://(\d{1,3})(/\S*)?$').hasMatch(trimmedValue)) {
     return null;
-  } else if (RegExp(r'^driver?://(\d{1,3})(/\S*)?$').hasMatch(trimmedValue)) {
-    return null;
-  } else {
+  }
+  // Path-only strings are not fetchable HTTP URLs (common paste mistake).
+  if (trimmedValue.startsWith('/') && !trimmedValue.startsWith('//')) {
     return AppLocalizations.of(context)!.formValidatorUrl;
   }
+
+  var candidate = trimmedValue;
+  if (!candidate.contains('://')) {
+    candidate = 'https://$candidate';
+  }
+  if (_isValidHttpLikeUrl(candidate)) {
+    return null;
+  }
+  return AppLocalizations.of(context)!.formValidatorUrl;
 }

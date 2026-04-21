@@ -181,26 +181,36 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
   }
 
   Future<void> _onSubmit(BuildContext context) async {
-    if (_formKey.currentState?.validate() ?? false) {
-      final host = _hostController.text.trim();
-      final user = _usernameController.text.trim();
-      final pass = _passwordController.text.trim();
-      final title = _titleController.text.trim();
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
 
-      final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
-      final xtreamUrl = "$baseUrl/get.php?username=$user&password=$pass&type=m3u_plus&output=ts";
-
-      final resp = await showNotification(
-        context,
-        Api.playlistInsert(xtreamUrl, title),
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(behavior: SnackBarBehavior.floating, content: Text(l10n.formValidatorRequired)),
       );
+      setState(() {});
+      return;
+    }
 
-      if (resp?.error == null && context.mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeView()),
-          (route) => false,
-        );
-      }
+    final host = _hostController.text.trim();
+    final user = _usernameController.text.trim();
+    final pass = _passwordController.text.trim();
+    final title = _titleController.text.trim();
+
+    final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
+    final xtreamUrl = "$baseUrl/get.php?username=$user&password=$pass&type=m3u_plus&output=ts";
+
+    final resp = await showNotification(
+      context,
+      Api.playlistInsert(xtreamUrl, title),
+    );
+
+    if (resp?.error == null && context.mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const HomeView()),
+        (route) => false,
+      );
     }
   }
 }
