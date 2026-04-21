@@ -53,7 +53,7 @@ ThemeData getLightTheme(Locale locale) {
     dividerColor: Colors.black12,
     cardTheme: CardThemeData(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.black.withOpacity(0.05))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black.withOpacity(0.05))),
       clipBehavior: Clip.antiAlias,
     ),
     appBarTheme: const AppBarTheme(
@@ -110,7 +110,7 @@ ThemeData getDarkTheme(Locale locale) {
     dividerColor: Colors.white12,
     cardTheme: CardThemeData(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), border: Border.all(color: Colors.white.withOpacity(0.08))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.white.withOpacity(0.08))),
       color: const Color(0xFF24272B),
       clipBehavior: Clip.antiAlias,
     ),
