@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 /// [TextFormField] with outline [InputDecoration] can lay out at **zero height**
 /// while the caption still paints; this avoids that by drawing the box with
 /// [DecoratedBox] and using a collapsed inner decoration.
+///
+/// Typed text and cursor use **hard-coded contrast** and an isolated [Theme] so
+/// global [ColorScheme.onSurface] / selection colors cannot match the field fill
+/// (which made caret + glyphs effectively invisible).
 class OnboardingLabeledField extends StatelessWidget {
   const OnboardingLabeledField({
     super.key,
@@ -13,6 +17,9 @@ class OnboardingLabeledField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.validator,
+    /// Use for URLs, hosts, usernames, passwords so Latin/numbers type LTR
+    /// inside an RTL app and paint with consistent colors.
+    this.ltrInput = true,
   });
 
   final String label;
@@ -21,8 +28,16 @@ class OnboardingLabeledField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
+  final bool ltrInput;
 
   static const double _rowHeight = 52;
+
+  /// Typed text / caret — not derived from [ThemeData.colorScheme] to avoid
+  /// matching the dark fill when the app theme is inconsistent with the card.
+  static const Color _typingOnDark = Color(0xFFF2F5FF);
+  static const Color _typingOnLight = Color(0xFF0D1117);
+  static const Color _hintOnDark = Color(0xFF9FB0D0);
+  static const Color _hintOnLight = Color(0xFF5C6570);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +45,47 @@ class OnboardingLabeledField extends StatelessWidget {
     final dark = theme.brightness == Brightness.dark;
     final fill = dark ? const Color(0xFF1A2435) : const Color(0xFFE4E8EF);
     final borderColor = dark ? const Color(0xFFB0B8C8) : const Color(0xFF6B7280);
-    final fg = dark ? Colors.white : Colors.black87;
-    final hint = dark ? const Color(0xFF9CA8BC) : const Color(0xFF6B7280);
+    final labelFg = dark ? Colors.white : Colors.black87;
+
+    final typing = dark ? _typingOnDark : _typingOnLight;
+    final hint = dark ? _hintOnDark : _hintOnLight;
+
+    final field = TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      maxLines: 1,
+      keyboardType: TextInputType.text,
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: ltrInput ? TextAlign.left : TextAlign.start,
+      style: TextStyle(
+        color: typing,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      cursorColor: typing,
+      cursorWidth: 2,
+      decoration: InputDecoration.collapsed(
+        hintText: hintText,
+        hintStyle: TextStyle(color: hint, fontSize: 15, fontWeight: FontWeight.w400),
+      ),
+      validator: validator,
+    );
+
+    final wrappedField = Theme(
+      data: theme.copyWith(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: typing,
+          selectionColor: typing.withOpacity(0.35),
+          selectionHandleColor: typing,
+        ),
+      ),
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: typing, fontSize: 16),
+        child: ltrInput
+            ? Directionality(textDirection: TextDirection.ltr, child: field)
+            : field,
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +97,7 @@ class OnboardingLabeledField extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: fg,
+              color: labelFg,
               height: 1.2,
             ),
           ),
@@ -65,20 +119,7 @@ class OnboardingLabeledField extends StatelessWidget {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
-                        child: TextFormField(
-                          controller: controller,
-                          obscureText: obscureText,
-                          maxLines: 1,
-                          keyboardType: TextInputType.text,
-                          textAlignVertical: TextAlignVertical.center,
-                          style: TextStyle(color: fg, fontSize: 16, height: 1.2),
-                          cursorColor: fg,
-                          decoration: InputDecoration.collapsed(
-                            hintText: hintText,
-                            hintStyle: TextStyle(color: hint, fontSize: 15, height: 1.2),
-                          ),
-                          validator: validator,
-                        ),
+                        child: wrappedField,
                       ),
                     ),
                     if (suffixIcon != null)

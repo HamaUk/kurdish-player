@@ -137,6 +137,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                               OnboardingLabeledField(
                                 label: l10n.buttonName,
                                 controller: _titleController,
+                                ltrInput: false,
                                 validator: (value) => requiredValidator(context, value),
                               ),
                               const SizedBox(height: 20),
@@ -146,12 +147,13 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 hintText: isFileMode ? null : 'https://',
                                 suffixIcon: isFileMode
                                     ? IconButton(
+                                        style: IconButton.styleFrom(foregroundColor: const Color(0xFFF2F5FF)),
                                         onPressed: _loadingPicker ? null : _pickM3uFile,
                                         icon: _loadingPicker
                                             ? const SizedBox(
                                                 width: 22,
                                                 height: 22,
-                                                child: CircularProgressIndicator(strokeWidth: 2),
+                                                child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFF2F5FF)),
                                               )
                                             : const Icon(Icons.folder_open),
                                       )

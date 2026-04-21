@@ -130,6 +130,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                               OnboardingLabeledField(
                                 label: l10n.buttonName,
                                 controller: _titleController,
+                                ltrInput: false,
                                 validator: (value) => requiredValidator(context, value),
                               ),
                               const SizedBox(height: 18),
