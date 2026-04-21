@@ -61,7 +61,13 @@ void main(List<String> args) async {
         }
       });
     }
-    ErrorWidget.builder = (details) => const SizedBox.shrink();
+    ErrorWidget.builder = (details) {
+      if (kDebugMode) {
+        return ErrorWidget(details.exception);
+      }
+      FlutterError.presentError(details);
+      return const SizedBox.shrink();
+    };
 
     final playlists = await Api.playlistQueryAll();
     final drivers = await Api.driverQueryAll();

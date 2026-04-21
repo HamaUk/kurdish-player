@@ -14,6 +14,12 @@ const _dialogTheme = DialogThemeData(
 
 /// Adopting the 'perfect' pattern from optic_tv:
 /// Apply Rabar font specifically to TextTheme only when Kurdish is selected.
+///
+/// **Do not** set Rabar on [TextTheme.bodyLarge] / [bodyMedium] / [bodySmall]:
+/// [TextField] and [TextFormField] merge those styles for editable text; Rabar
+/// can fail to render Latin/ASCII in the engine while static [Text] labels
+/// still look fine (invisible “empty” inputs). Headlines, titles, and labels
+/// keep Rabar for Kurdish UI chrome.
 TextTheme buildTextTheme(Locale locale, TextTheme base) {
   if (locale.languageCode != 'ckb') return base;
   return base.copyWith(
@@ -26,9 +32,6 @@ TextTheme buildTextTheme(Locale locale, TextTheme base) {
     titleLarge: base.titleLarge?.copyWith(fontFamily: fontFamily),
     titleMedium: base.titleMedium?.copyWith(fontFamily: fontFamily),
     titleSmall: base.titleSmall?.copyWith(fontFamily: fontFamily),
-    bodyLarge: base.bodyLarge?.copyWith(fontFamily: fontFamily),
-    bodyMedium: base.bodyMedium?.copyWith(fontFamily: fontFamily),
-    bodySmall: base.bodySmall?.copyWith(fontFamily: fontFamily),
     labelLarge: base.labelLarge?.copyWith(fontFamily: fontFamily),
     labelMedium: base.labelMedium?.copyWith(fontFamily: fontFamily),
     labelSmall: base.labelSmall?.copyWith(fontFamily: fontFamily),
