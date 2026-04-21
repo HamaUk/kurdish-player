@@ -74,7 +74,10 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                 color: colorScheme.secondary.withOpacity(0.05),
               ),
             ),
-          ).animate().fadeIn(duration: 1200.ms).scale(begin: const Offset(0.8, 0.8)),
+            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+             .fadeIn(duration: 1200.ms)
+             .scale(begin: const Offset(0.8, 0.8))
+             .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
 
           SafeArea(
             child: Center(
@@ -119,7 +122,8 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                 letterSpacing: -0.5,
                               ),
                               textAlign: TextAlign.center,
-                            ).animate().fadeIn(delay: 200.ms),
+                            ).animate().fadeIn(delay: 200.ms, duration: 600.ms)
+                             .shimmer(duration: 1500.ms, delay: 800.ms),
                             const SizedBox(height: 32),
                             Form(
                               key: _formKey,
@@ -132,7 +136,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.label_important_outline),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.1, end: 0),
+                                  ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _hostController,
@@ -142,7 +146,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.dns_outlined),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0),
+                                  ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _usernameController,
@@ -151,7 +155,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.person_outline),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.1, end: 0),
+                                  ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _passwordController,
@@ -161,7 +165,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     ),
                                     obscureText: true,
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 600.ms).slideX(begin: 0.1, end: 0),
+                                  ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                                 ],
                               ),
                             ),
@@ -176,7 +180,9 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ).animate().fadeIn(delay: 700.ms).scale(begin: const Offset(0.95, 0.95)),
+                            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+                             .shimmer(duration: 2000.ms, delay: 1000.ms)
+                             .scaleXY(end: 1.02, duration: 1500.ms, curve: Curves.easeInOut),
                           ],
                         ),
                       ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),

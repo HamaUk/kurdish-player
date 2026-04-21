@@ -82,7 +82,10 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                 color: colorScheme.primary.withOpacity(0.05),
               ),
             ),
-          ).animate().fadeIn(duration: 1000.ms).scale(begin: const Offset(0.8, 0.8)),
+            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+             .fadeIn(duration: 1000.ms)
+             .scale(begin: const Offset(0.8, 0.8))
+             .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
           
           SafeArea(
             child: Center(
@@ -130,7 +133,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                   letterSpacing: -0.5,
                                 ),
                                 textAlign: TextAlign.center,
-                              ).animate().fadeIn(delay: 200.ms),
+                              ).animate().fadeIn(delay: 200.ms, duration: 600.ms)
+                               .shimmer(duration: 1500.ms, delay: 800.ms),
                               const SizedBox(height: 32),
                               TextFormField(
                                 controller: _titleController,
@@ -139,7 +143,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                   prefixIcon: const Icon(Icons.drive_file_rename_outline),
                                 ),
                                 validator: (value) => requiredValidator(context, value),
-                              ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.1, end: 0),
+                              ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                               const SizedBox(height: 20),
                               TextFormField(
                                 controller: _urlController,
@@ -156,7 +160,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                       : null,
                                 ),
                                 validator: (value) => isFileMode ? requiredValidator(context, value) : urlValidator(context, value, true),
-                              ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0),
+                              ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
                               const SizedBox(height: 40),
                               SizedBox(
                                 height: 56,
@@ -167,7 +171,9 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              ).animate().fadeIn(delay: 500.ms).scale(begin: const Offset(0.95, 0.95)),
+                              ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+                               .shimmer(duration: 2000.ms, delay: 1000.ms)
+                               .scaleXY(end: 1.02, duration: 1500.ms, curve: Curves.easeInOut),
                             ],
                           ),
                         ).animate().fadeIn(duration: 800.ms),
