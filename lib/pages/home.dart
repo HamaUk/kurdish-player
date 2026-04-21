@@ -41,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
         child: NavigationBar(
           selectedIndex: index,
           onDestinationSelected: (index) => setState(() => this.index = index),
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations:
               _destinations(context).map((_TabDestination destination) {
                 return NavigationDestination(
