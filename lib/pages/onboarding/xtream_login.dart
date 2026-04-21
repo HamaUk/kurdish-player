@@ -6,6 +6,7 @@ import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
 import '../utils/notification.dart';
 import '../home.dart';
+import 'onboarding_inputs.dart';
 
 class XtreamLoginPage extends StatefulWidget {
   const XtreamLoginPage({super.key});
@@ -81,11 +82,11 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                 shape: BoxShape.circle,
                 color: colorScheme.secondary.withOpacity(0.05),
               ),
-            ),
             ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-             .fadeIn(duration: 1200.ms)
-             .scale(begin: const Offset(0.8, 0.8))
-             .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+                .fadeIn(duration: 1200.ms)
+                .scale(begin: const Offset(0.8, 0.8))
+                .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+          ),
 
           SafeArea(
             child: Center(
@@ -128,10 +129,10 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: -0.5,
+                                color: theme.brightness == Brightness.dark ? Colors.white : Colors.black87,
                               ),
                               textAlign: TextAlign.center,
-                            ).animate().fadeIn(delay: 200.ms, duration: 600.ms)
-                             .shimmer(duration: 1500.ms, delay: 800.ms),
+                            ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
                             const SizedBox(height: 32),
                             Form(
                               key: _formKey,
@@ -139,37 +140,45 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                 children: [
                                   TextFormField(
                                     controller: _titleController,
-                                    decoration: InputDecoration(
+                                    style: onboardingInputTextStyle(theme),
+                                    decoration: onboardingInputDecoration(
+                                      theme,
                                       labelText: l10n.buttonName,
-                                      prefixIcon: const Icon(Icons.label),
+                                      prefixIcon: Icons.label,
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _hostController,
-                                    decoration: InputDecoration(
+                                    style: onboardingInputTextStyle(theme),
+                                    decoration: onboardingInputDecoration(
+                                      theme,
                                       labelText: l10n.serverFormItemLabelServer,
-                                      hintText: "http://example.com:8080",
-                                      prefixIcon: const Icon(Icons.dns),
+                                      hintText: 'http://example.com:8080',
+                                      prefixIcon: Icons.dns,
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _usernameController,
-                                    decoration: InputDecoration(
+                                    style: onboardingInputTextStyle(theme),
+                                    decoration: onboardingInputDecoration(
+                                      theme,
                                       labelText: l10n.loginFormItemLabelUsername,
-                                      prefixIcon: const Icon(Icons.person),
+                                      prefixIcon: Icons.person,
                                     ),
                                     validator: (value) => requiredValidator(context, value),
                                   ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _passwordController,
-                                    decoration: InputDecoration(
+                                    style: onboardingInputTextStyle(theme),
+                                    decoration: onboardingInputDecoration(
+                                      theme,
                                       labelText: l10n.loginFormItemLabelPwd,
-                                      prefixIcon: const Icon(Icons.lock),
+                                      prefixIcon: Icons.lock,
                                     ),
                                     obscureText: true,
                                     validator: (value) => requiredValidator(context, value),
@@ -188,12 +197,10 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                             .shimmer(duration: 2000.ms, delay: 1000.ms)
-                             .scaleXY(end: 1.02, duration: 1500.ms, curve: Curves.easeInOut),
+                            ),
                           ],
                         ),
-                      ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
+                      ).animate().slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
                     ],
                   ),
                 ),

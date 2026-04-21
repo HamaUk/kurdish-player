@@ -79,6 +79,8 @@ ThemeData getLightTheme(Locale locale) {
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.error, width: 1.5)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54),
+      floatingLabelStyle: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black87),
+      prefixIconColor: Colors.black54,
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
@@ -129,7 +131,7 @@ ThemeData getDarkTheme(Locale locale) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.white.withOpacity(0.08),
+      fillColor: const Color(0xFF2A2F38),
       isDense: true,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white38)),
       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.white38)),
@@ -137,6 +139,8 @@ ThemeData getDarkTheme(Locale locale) {
       errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.error, width: 1.5)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
+      floatingLabelStyle: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+      prefixIconColor: Colors.white70,
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(

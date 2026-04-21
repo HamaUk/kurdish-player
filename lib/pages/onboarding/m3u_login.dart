@@ -8,6 +8,7 @@ import '../../validators/validators.dart';
 import '../home.dart';
 import '../utils/notification.dart';
 import '../utils/utils.dart';
+import 'onboarding_inputs.dart';
 
 enum M3uLoginMode { url, file }
 
@@ -89,11 +90,11 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                 shape: BoxShape.circle,
                 color: colorScheme.primary.withOpacity(0.05),
               ),
-            ),
             ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-             .fadeIn(duration: 1000.ms)
-             .scale(begin: const Offset(0.8, 0.8))
-             .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+                .fadeIn(duration: 1000.ms)
+                .scale(begin: const Offset(0.8, 0.8))
+                .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+          ),
           
           SafeArea(
             child: Center(
@@ -139,26 +140,30 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: -0.5,
+                                  color: theme.brightness == Brightness.dark ? Colors.white : Colors.black87,
                                 ),
                                 textAlign: TextAlign.center,
-                              ).animate().fadeIn(delay: 200.ms, duration: 600.ms)
-                               .shimmer(duration: 1500.ms, delay: 800.ms),
+                              ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
                               const SizedBox(height: 32),
                               TextFormField(
                                 controller: _titleController,
-                                decoration: InputDecoration(
+                                style: onboardingInputTextStyle(theme),
+                                decoration: onboardingInputDecoration(
+                                  theme,
                                   labelText: l10n.buttonName,
-                                  prefixIcon: const Icon(Icons.edit),
+                                  prefixIcon: Icons.edit,
                                 ),
                                 validator: (value) => requiredValidator(context, value),
                               ),
                               const SizedBox(height: 20),
                               TextFormField(
                                 controller: _urlController,
-                                decoration: InputDecoration(
+                                style: onboardingInputTextStyle(theme),
+                                decoration: onboardingInputDecoration(
+                                  theme,
                                   labelText: isFileMode ? l10n.titleEditM3U : l10n.liveCreateFormItemLabelUrl,
-                                  prefixIcon: Icon(isFileMode ? Icons.insert_drive_file : Icons.link),
-                                  suffixIcon: isFileMode 
+                                  prefixIcon: isFileMode ? Icons.insert_drive_file : Icons.link,
+                                  suffixIcon: isFileMode
                                       ? IconButton(
                                           onPressed: _loadingPicker ? null : _pickM3uFile,
                                           icon: _loadingPicker
@@ -179,12 +184,10 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                               .shimmer(duration: 2000.ms, delay: 1000.ms)
-                               .scaleXY(end: 1.02, duration: 1500.ms, curve: Curves.easeInOut),
+                              ),
                             ],
                           ),
-                        ).animate().fadeIn(duration: 800.ms),
+                        ),
                       ).animate().slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
                     ],
                   ),
