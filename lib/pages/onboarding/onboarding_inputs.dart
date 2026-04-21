@@ -1,12 +1,11 @@
+import 'package:flutter/cupertino.dart' show CupertinoTextField, OverlayVisibilityMode;
 import 'package:flutter/material.dart';
 
-/// Onboarding inputs: fixed layout shell + strong colors / selection theme.
-///
-/// Kurdish (`ckb`) no longer applies Rabar to [TextTheme.body*] globally
-/// (see `buildTextTheme` in `theme.dart`): [TextFormField] was merging Rabar into
-/// [EditableText], which often paints **no Latin/ASCII** while labels still
-/// looked fine. Title fields still opt into Rabar explicitly when needed.
-class OnboardingLabeledField extends StatelessWidget {
+/// Onboarding text entry using [CupertinoTextField] inside [FormField], **not**
+/// [TextFormField]. Material [InputDecorator] + [EditableText] still misbehaved
+/// for some users (invisible Latin text, no caret) under RTL + scaled layout;
+/// Cupertino uses a different implementation and paints reliably.
+class OnboardingLabeledField extends StatefulWidget {
   const OnboardingLabeledField({
     super.key,
     required this.label,
@@ -15,7 +14,6 @@ class OnboardingLabeledField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.validator,
-    /// Latin / numbers (URLs, hosts, credentials).
     this.ltrInput = true,
   });
 
@@ -37,6 +35,38 @@ class OnboardingLabeledField extends StatelessWidget {
   static const String _rabar = 'Rabar';
 
   @override
+  State<OnboardingLabeledField> createState() => _OnboardingLabeledFieldState();
+}
+
+class _OnboardingLabeledFieldState extends State<OnboardingLabeledField> {
+  FormFieldState<String>? _formFieldState;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_syncFormValue);
+  }
+
+  @override
+  void didUpdateWidget(OnboardingLabeledField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_syncFormValue);
+      widget.controller.addListener(_syncFormValue);
+    }
+  }
+
+  void _syncFormValue() {
+    _formFieldState?.didChange(widget.controller.text);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_syncFormValue);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dark = theme.brightness == Brightness.dark;
@@ -44,61 +74,23 @@ class OnboardingLabeledField extends StatelessWidget {
     final borderColor = dark ? const Color(0xFFB0B8C8) : const Color(0xFF6B7280);
     final labelFg = dark ? Colors.white : Colors.black87;
 
-    final typing = dark ? _typingOnDark : _typingOnLight;
-    final hint = dark ? _hintOnDark : _hintOnLight;
+    final typing = dark ? OnboardingLabeledField._typingOnDark : OnboardingLabeledField._typingOnLight;
+    final hint = dark ? OnboardingLabeledField._hintOnDark : OnboardingLabeledField._hintOnLight;
 
-    final cs = theme.colorScheme;
-    final isolatedTheme = theme.copyWith(
-      colorScheme: cs.copyWith(
-        onSurface: typing,
-        onSurfaceVariant: hint,
-        surface: fill,
-        surfaceTint: Colors.transparent,
-      ),
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: typing,
-        selectionColor: typing.withOpacity(0.35),
-        selectionHandleColor: typing,
-      ),
-    );
-
-    final fieldStyle = TextStyle(
+    final textStyle = TextStyle(
       color: typing,
       fontSize: 16,
-      height: 1.25,
+      height: 1.2,
       fontWeight: FontWeight.w500,
-      fontFamily: ltrInput ? null : _rabar,
-      fontFamilyFallback: ltrInput ? null : const ['Roboto', 'Noto Sans', 'sans-serif'],
+      fontFamily: widget.ltrInput ? null : OnboardingLabeledField._rabar,
+      fontFamilyFallback:
+          widget.ltrInput ? null : const ['Roboto', 'Noto Sans', 'sans-serif'],
     );
 
-    final field = TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      maxLines: 1,
-      keyboardType: TextInputType.text,
-      textAlignVertical: TextAlignVertical.center,
-      textAlign: ltrInput ? TextAlign.left : TextAlign.start,
-      style: fieldStyle,
-      cursorColor: typing,
-      cursorWidth: 2,
-      decoration: InputDecoration.collapsed(
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: hint,
-          fontSize: 15,
-          height: 1.25,
-          fontFamily: ltrInput ? null : _rabar,
-          fontFamilyFallback: ltrInput ? null : const ['Roboto', 'Noto Sans', 'sans-serif'],
-        ),
-      ),
-      validator: validator,
-    );
-
-    final wrappedField = Theme(
-      data: isolatedTheme,
-      child: ltrInput
-          ? Directionality(textDirection: TextDirection.ltr, child: field)
-          : field,
+    final boxDecoration = BoxDecoration(
+      color: fill,
+      border: Border.all(color: borderColor, width: 1.5),
+      borderRadius: BorderRadius.circular(12),
     );
 
     return Column(
@@ -107,7 +99,7 @@ class OnboardingLabeledField extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(start: 4, end: 4, bottom: 8),
           child: Text(
-            label,
+            widget.label,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -116,36 +108,50 @@ class OnboardingLabeledField extends StatelessWidget {
             ),
           ),
         ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: fill,
-              border: Border.all(color: borderColor, width: 1.5),
-            ),
-            child: SizedBox(
-              height: _rowHeight,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
-                        child: wrappedField,
-                      ),
-                    ),
-                    if (suffixIcon != null)
-                      Center(
-                        heightFactor: 1,
-                        child: suffixIcon,
-                      ),
-                  ],
-                ),
+        FormField<String>(
+          initialValue: widget.controller.text,
+          validator: widget.validator,
+          builder: (state) {
+            _formFieldState = state;
+            final field = SizedBox(
+              height: OnboardingLabeledField._rowHeight,
+              child: CupertinoTextField(
+                controller: widget.controller,
+                obscureText: widget.obscureText,
+                maxLines: 1,
+                placeholder: widget.hintText,
+                placeholderStyle: TextStyle(color: hint, fontSize: 15, height: 1.2),
+                style: textStyle,
+                cursorColor: typing,
+                padding: const EdgeInsetsDirectional.only(start: 12, end: 10, top: 10, bottom: 10),
+                decoration: boxDecoration,
+                suffix: widget.suffixIcon,
+                clearButtonMode: OverlayVisibilityMode.never,
+                textAlign: widget.ltrInput ? TextAlign.left : TextAlign.start,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                spellCheckConfiguration: const SpellCheckConfiguration.disabled(),
+                onChanged: state.didChange,
               ),
-            ),
-          ),
+            );
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                widget.ltrInput
+                    ? Directionality(textDirection: TextDirection.ltr, child: field)
+                    : field,
+                if (state.hasError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      state.errorText!,
+                      style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
       ],
     );
