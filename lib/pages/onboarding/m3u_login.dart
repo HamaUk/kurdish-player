@@ -46,6 +46,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        leading: const BackButton(),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: theme.brightness == Brightness.dark ? Colors.white : Colors.black,
@@ -143,7 +144,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                   prefixIcon: const Icon(Icons.drive_file_rename_outline),
                                 ),
                                 validator: (value) => requiredValidator(context, value),
-                              ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                              ),
                               const SizedBox(height: 20),
                               TextFormField(
                                 controller: _urlController,
@@ -160,7 +161,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                       : null,
                                 ),
                                 validator: (value) => isFileMode ? requiredValidator(context, value) : urlValidator(context, value, true),
-                              ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                              ),
                               const SizedBox(height: 40),
                               SizedBox(
                                 height: 56,

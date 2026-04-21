@@ -41,6 +41,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        leading: const BackButton(),
         title: Text(l10n.onboardingXtream, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -136,7 +137,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.label_important_outline),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                                  ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _hostController,
@@ -146,7 +147,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.dns_outlined),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                                  ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _usernameController,
@@ -155,7 +156,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                       prefixIcon: const Icon(Icons.person_outline),
                                     ),
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                                  ),
                                   const SizedBox(height: 18),
                                   TextFormField(
                                     controller: _passwordController,
@@ -165,7 +166,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                                     ),
                                     obscureText: true,
                                     validator: (value) => requiredValidator(context, value),
-                                  ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.1, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                                  ),
                                 ],
                               ),
                             ),
