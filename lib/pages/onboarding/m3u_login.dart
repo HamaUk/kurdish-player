@@ -178,9 +178,23 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
 
   Future<void> _submit(BuildContext context) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    
+    String url = _urlController.text.trim();
+    
+    // Detect and normalize Xtream Codes API URLs
+    if (url.contains('get.php') && (url.contains('username=') || url.contains('password='))) {
+      // Ensure it has type=m3u_plus&output=ts for proper Xtream Codes format
+      if (!url.contains('type=')) {
+        url += '&type=m3u_plus';
+      }
+      if (!url.contains('output=')) {
+        url += '&output=ts';
+      }
+    }
+    
     final resp = await showNotification(
       context,
-      Api.playlistInsert(_urlController.text.trim(), _titleController.text.trim()),
+      Api.playlistInsert(url, _titleController.text.trim()),
     );
     if (resp?.error == null && context.mounted) {
       Navigator.of(
