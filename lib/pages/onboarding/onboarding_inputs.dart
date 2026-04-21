@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Onboarding frosted cards and floating [InputDecorator] labels can fail to
-/// paint clearly on some devices. This widget always draws a visible caption
-/// plus a filled outline field (no floating label merge issues).
+/// Labels plus a **fixed-height** input shell. On some RTL / scaled layouts,
+/// [TextFormField] with outline [InputDecoration] can lay out at **zero height**
+/// while the caption still paints; this avoids that by drawing the box with
+/// [DecoratedBox] and using a collapsed inner decoration.
 class OnboardingLabeledField extends StatelessWidget {
   const OnboardingLabeledField({
     super.key,
@@ -12,7 +13,6 @@ class OnboardingLabeledField extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.validator,
-    this.maxLines = 1,
   });
 
   final String label;
@@ -21,12 +21,12 @@ class OnboardingLabeledField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
-  final int maxLines;
+
+  static const double _rowHeight = 52;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     final dark = theme.brightness == Brightness.dark;
     final fill = dark ? const Color(0xFF1A2435) : const Color(0xFFE4E8EF);
     final borderColor = dark ? const Color(0xFFB0B8C8) : const Color(0xFF6B7280);
@@ -48,40 +48,49 @@ class OnboardingLabeledField extends StatelessWidget {
             ),
           ),
         ),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          maxLines: obscureText ? 1 : maxLines,
-          minLines: 1,
-          style: TextStyle(color: fg, fontSize: 16, height: 1.35),
-          cursorColor: fg,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(color: hint, fontSize: 15),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            filled: true,
-            fillColor: fill,
-            isDense: true,
-            suffixIcon: suffixIcon,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: borderColor, width: 1.5),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: fill,
+              border: Border.all(color: borderColor, width: 1.5),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: borderColor, width: 1.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: cs.primary, width: 2.5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: cs.error, width: 1.5),
+            child: SizedBox(
+              height: _rowHeight,
+              child: Material(
+                type: MaterialType.transparency,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
+                        child: TextFormField(
+                          controller: controller,
+                          obscureText: obscureText,
+                          maxLines: 1,
+                          keyboardType: TextInputType.text,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: TextStyle(color: fg, fontSize: 16, height: 1.2),
+                          cursorColor: fg,
+                          decoration: InputDecoration.collapsed(
+                            hintText: hintText,
+                            hintStyle: TextStyle(color: hint, fontSize: 15, height: 1.2),
+                          ),
+                          validator: validator,
+                        ),
+                      ),
+                    ),
+                    if (suffixIcon != null)
+                      Center(
+                        heightFactor: 1,
+                        child: suffixIcon,
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
-          validator: validator,
         ),
       ],
     );
