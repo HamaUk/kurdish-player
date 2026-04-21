@@ -15,11 +15,6 @@ class XtreamLoginPage extends StatefulWidget {
 }
 
 class _XtreamLoginPageState extends State<XtreamLoginPage> {
-  static const _darkTop = Color(0xFF0B1020);
-  static const _darkBottom = Color(0xFF05070F);
-  static const _panelColor = Color(0xFF141A2A);
-  static const _accent = Color(0xFF5E7BFF);
-
   final _formKey = GlobalKey<FormState>();
   late final _titleController = TextEditingController();
   late final _hostController = TextEditingController();
@@ -38,112 +33,160 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    if (l10n == null) return const SizedBox.shrink(); // Safety check
+    if (l10n == null) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(l10n.onboardingXtream),
+        title: Text(l10n.onboardingXtream, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.white,
       ),
-      extendBodyBehindAppBar: true,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [_darkTop, _darkBottom],
+      body: Stack(
+        children: [
+          // Premium Background Gradient
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: theme.brightness == Brightness.dark
+                      ? [const Color(0xFF141A2A), const Color(0xFF05070F)]
+                      : [const Color(0xFFF8F9FA), const Color(0xFFE9ECEF)],
+                ),
+              ),
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+          // Decorative Blobs
+          Positioned(
+            bottom: -120,
+            left: -120,
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: colorScheme.secondary.withOpacity(0.05),
+              ),
+            ),
+          ).animate().fadeIn(duration: 1200.ms).scale(begin: const Offset(0.8, 0.8)),
+
+          SafeArea(
             child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: _panelColor,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white10),
-                  ),
-                  padding: const EdgeInsets.all(24),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Logo(size: 140),
-                      const SizedBox(height: 24),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _titleController,
-                              decoration: _inputDecoration(context, l10n.buttonName, Icons.label_important_outline),
-                              validator: (value) => requiredValidator(context, value),
-                            ),
-                            const SizedBox(height: 18),
-                            TextFormField(
-                              controller: _hostController,
-                              decoration: _inputDecoration(context, l10n.serverFormItemLabelServer, Icons.dns_outlined, hint: "http://example.com:8080"),
-                              validator: (value) => requiredValidator(context, value),
-                            ),
-                            const SizedBox(height: 18),
-                            TextFormField(
-                              controller: _usernameController,
-                              decoration: _inputDecoration(context, l10n.loginFormItemLabelUsername, Icons.person_outline),
-                              validator: (value) => requiredValidator(context, value),
-                            ),
-                            const SizedBox(height: 18),
-                            TextFormField(
-                              controller: _passwordController,
-                              decoration: _inputDecoration(context, l10n.loginFormItemLabelPwd, Icons.password_outlined),
-                              obscureText: true,
-                              validator: (value) => requiredValidator(context, value),
+                      const Logo(size: 150)
+                          .animate()
+                          .fadeIn(duration: 600.ms)
+                          .slideY(begin: -0.2, end: 0, curve: Curves.easeOutBack),
+                      const SizedBox(height: 32),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.brightness == Brightness.dark 
+                              ? Colors.white.withOpacity(0.05) 
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(
+                            color: theme.brightness == Brightness.dark 
+                                ? Colors.white.withOpacity(0.08) 
+                                : Colors.black.withOpacity(0.05),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: _accent,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            elevation: 4,
-                            shadowColor: _accent.withOpacity(0.4),
-                          ),
-                          onPressed: () => _onSubmit(context),
-                          icon: const Icon(Icons.login),
-                          label: Text(
-                            l10n.buttonSubmit,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                        padding: const EdgeInsets.all(32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              l10n.onboardingXtream,
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ).animate().fadeIn(delay: 200.ms),
+                            const SizedBox(height: 32),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: _titleController,
+                                    decoration: InputDecoration(
+                                      labelText: l10n.buttonName,
+                                      prefixIcon: const Icon(Icons.label_important_outline),
+                                    ),
+                                    validator: (value) => requiredValidator(context, value),
+                                  ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.1, end: 0),
+                                  const SizedBox(height: 18),
+                                  TextFormField(
+                                    controller: _hostController,
+                                    decoration: InputDecoration(
+                                      labelText: l10n.serverFormItemLabelServer,
+                                      hintText: "http://example.com:8080",
+                                      prefixIcon: const Icon(Icons.dns_outlined),
+                                    ),
+                                    validator: (value) => requiredValidator(context, value),
+                                  ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0),
+                                  const SizedBox(height: 18),
+                                  TextFormField(
+                                    controller: _usernameController,
+                                    decoration: InputDecoration(
+                                      labelText: l10n.loginFormItemLabelUsername,
+                                      prefixIcon: const Icon(Icons.person_outline),
+                                    ),
+                                    validator: (value) => requiredValidator(context, value),
+                                  ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.1, end: 0),
+                                  const SizedBox(height: 18),
+                                  TextFormField(
+                                    controller: _passwordController,
+                                    decoration: InputDecoration(
+                                      labelText: l10n.loginFormItemLabelPwd,
+                                      prefixIcon: const Icon(Icons.password_outlined),
+                                    ),
+                                    obscureText: true,
+                                    validator: (value) => requiredValidator(context, value),
+                                  ).animate().fadeIn(delay: 600.ms).slideX(begin: 0.1, end: 0),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 40),
+                            SizedBox(
+                              height: 56,
+                              child: FilledButton.icon(
+                                onPressed: () => _onSubmit(context),
+                                icon: const Icon(Icons.login),
+                                label: Text(
+                                  l10n.buttonSubmit,
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ).animate().fadeIn(delay: 700.ms).scale(begin: const Offset(0.95, 0.95)),
+                          ],
                         ),
-                      ),
+                      ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
-    );
-  }
-
-  InputDecoration _inputDecoration(BuildContext context, String label, IconData icon, {String? hint}) {
-    return InputDecoration(
-      isDense: true,
-      labelText: label,
-      hintText: hint,
-      prefixIcon: Icon(icon),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 
@@ -154,7 +197,6 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
       final pass = _passwordController.text.trim();
       final title = _titleController.text.trim();
 
-      // Construct Xtream M3U Plus URL
       final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
       final xtreamUrl = "$baseUrl/get.php?username=$user&password=$pass&type=m3u_plus&output=ts";
 

@@ -14,7 +14,7 @@ enum SystemLanguage {
   auto;
 
   static SystemLanguage fromString(String? str) {
-    return SystemLanguage.values.firstWhere((element) => element.name == str, orElse: () => SystemLanguage.en);
+    return SystemLanguage.values.firstWhere((element) => element.name == str, orElse: () => SystemLanguage.ckb);
   }
 }
 
