@@ -1,11 +1,11 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import '../../components/logo.dart';
 import '../../l10n/app_localizations.dart';
 import '../../validators/validators.dart';
-import '../utils/notification.dart';
 import '../home.dart';
+import '../utils/notification.dart';
 import 'onboarding_inputs.dart';
 
 class XtreamLoginPage extends StatefulWidget {
@@ -38,6 +38,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final titleColor = theme.brightness == Brightness.dark ? Colors.white : Colors.black87;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -57,7 +58,6 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
       ),
       body: Stack(
         children: [
-          // Premium Background Gradient
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -71,7 +71,6 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
               ),
             ),
           ),
-          // Decorative Blobs
           Positioned(
             bottom: -120,
             left: -120,
@@ -82,12 +81,8 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                 shape: BoxShape.circle,
                 color: colorScheme.secondary.withOpacity(0.05),
               ),
-            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                .fadeIn(duration: 1200.ms)
-                .scale(begin: const Offset(0.8, 0.8))
-                .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+            ),
           ),
-
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -95,112 +90,84 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 500),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Logo(size: 150)
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .slideY(begin: -0.2, end: 0, curve: Curves.easeOutBack),
+                      const Logo(size: 150),
                       const SizedBox(height: 32),
                       Container(
                         decoration: BoxDecoration(
-                          color: theme.brightness == Brightness.dark 
-                              ? Colors.white.withOpacity(0.05) 
-                              : Colors.white,
+                          color: theme.brightness == Brightness.dark ? const Color(0xFF1C2230) : Colors.white,
                           borderRadius: BorderRadius.circular(28),
                           border: Border.all(
-                            color: theme.brightness == Brightness.dark 
-                                ? Colors.white.withOpacity(0.08) 
-                                : Colors.black.withOpacity(0.05),
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.white24
+                                : Colors.black.withOpacity(0.08),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withOpacity(0.12),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
                           ],
                         ),
                         padding: const EdgeInsets.all(32),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.onboardingXtream,
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.5,
-                                color: theme.brightness == Brightness.dark ? Colors.white : Colors.black87,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                l10n.onboardingXtream,
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -0.5,
+                                  color: titleColor,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
-                            const SizedBox(height: 32),
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    controller: _titleController,
-                                    style: onboardingInputTextStyle(theme),
-                                    decoration: onboardingInputDecoration(
-                                      theme,
-                                      labelText: l10n.buttonName,
-                                      prefixIcon: Icons.label,
-                                    ),
-                                    validator: (value) => requiredValidator(context, value),
-                                  ),
-                                  const SizedBox(height: 18),
-                                  TextFormField(
-                                    controller: _hostController,
-                                    style: onboardingInputTextStyle(theme),
-                                    decoration: onboardingInputDecoration(
-                                      theme,
-                                      labelText: l10n.serverFormItemLabelServer,
-                                      hintText: 'http://example.com:8080',
-                                      prefixIcon: Icons.dns,
-                                    ),
-                                    validator: (value) => requiredValidator(context, value),
-                                  ),
-                                  const SizedBox(height: 18),
-                                  TextFormField(
-                                    controller: _usernameController,
-                                    style: onboardingInputTextStyle(theme),
-                                    decoration: onboardingInputDecoration(
-                                      theme,
-                                      labelText: l10n.loginFormItemLabelUsername,
-                                      prefixIcon: Icons.person,
-                                    ),
-                                    validator: (value) => requiredValidator(context, value),
-                                  ),
-                                  const SizedBox(height: 18),
-                                  TextFormField(
-                                    controller: _passwordController,
-                                    style: onboardingInputTextStyle(theme),
-                                    decoration: onboardingInputDecoration(
-                                      theme,
-                                      labelText: l10n.loginFormItemLabelPwd,
-                                      prefixIcon: Icons.lock,
-                                    ),
-                                    obscureText: true,
-                                    validator: (value) => requiredValidator(context, value),
-                                  ),
-                                ],
+                              const SizedBox(height: 28),
+                              OnboardingLabeledField(
+                                label: l10n.buttonName,
+                                controller: _titleController,
+                                validator: (value) => requiredValidator(context, value),
                               ),
-                            ),
-                            const SizedBox(height: 40),
-                            SizedBox(
-                              height: 56,
-                              child: FilledButton.icon(
-                                onPressed: () => _onSubmit(context),
-                                icon: const Icon(Icons.login),
-                                label: Text(
-                                  l10n.buttonSubmit,
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              const SizedBox(height: 18),
+                              OnboardingLabeledField(
+                                label: l10n.serverFormItemLabelServer,
+                                controller: _hostController,
+                                hintText: 'http://example.com:8080',
+                                validator: (value) => requiredValidator(context, value),
+                              ),
+                              const SizedBox(height: 18),
+                              OnboardingLabeledField(
+                                label: l10n.loginFormItemLabelUsername,
+                                controller: _usernameController,
+                                validator: (value) => requiredValidator(context, value),
+                              ),
+                              const SizedBox(height: 18),
+                              OnboardingLabeledField(
+                                label: l10n.loginFormItemLabelPwd,
+                                controller: _passwordController,
+                                obscureText: true,
+                                validator: (value) => requiredValidator(context, value),
+                              ),
+                              const SizedBox(height: 36),
+                              SizedBox(
+                                height: 56,
+                                child: FilledButton.icon(
+                                  onPressed: () => _onSubmit(context),
+                                  icon: const Icon(Icons.login),
+                                  label: Text(
+                                    l10n.buttonSubmit,
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ).animate().slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
+                      ),
                     ],
                   ),
                 ),

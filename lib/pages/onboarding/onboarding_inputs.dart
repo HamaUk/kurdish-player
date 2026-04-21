@@ -1,44 +1,89 @@
 import 'package:flutter/material.dart';
 
-/// Onboarding cards use a very light frosted tint; default [InputDecorationTheme]
-/// fills can match the card and look like empty space. These decorations keep
-/// fields, labels, hints, and icons clearly visible in both themes.
-InputDecoration onboardingInputDecoration(
-  ThemeData theme, {
-  required String labelText,
-  String? hintText,
-  IconData? prefixIcon,
-  Widget? suffixIcon,
-}) {
-  final cs = theme.colorScheme;
-  final dark = theme.brightness == Brightness.dark;
-  final fill = dark ? const Color(0xFF252E42) : const Color(0xFFF2F4F8);
-  final labelMuted = dark ? Colors.white70 : Colors.black54;
-  final border = dark ? Colors.white38 : Colors.black26;
-  return InputDecoration(
-    labelText: labelText,
-    hintText: hintText,
-    filled: true,
-    fillColor: fill,
-    isDense: true,
-    labelStyle: TextStyle(color: labelMuted, fontWeight: FontWeight.w500),
-    floatingLabelStyle: TextStyle(
-      color: dark ? Colors.white : Colors.black87,
-      fontWeight: FontWeight.w600,
-    ),
-    hintStyle: TextStyle(color: dark ? Colors.white54 : Colors.black45),
-    prefixIconColor: labelMuted,
-    prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
-    suffixIcon: suffixIcon,
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: border)),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: border)),
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: cs.primary, width: 2)),
-    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: cs.error, width: 1.5)),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-  );
-}
+/// Onboarding frosted cards and floating [InputDecorator] labels can fail to
+/// paint clearly on some devices. This widget always draws a visible caption
+/// plus a filled outline field (no floating label merge issues).
+class OnboardingLabeledField extends StatelessWidget {
+  const OnboardingLabeledField({
+    super.key,
+    required this.label,
+    required this.controller,
+    this.hintText,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.validator,
+    this.maxLines = 1,
+  });
 
-TextStyle onboardingInputTextStyle(ThemeData theme) {
-  final dark = theme.brightness == Brightness.dark;
-  return TextStyle(color: dark ? Colors.white : Colors.black87, fontSize: 16, height: 1.35);
+  final String label;
+  final TextEditingController controller;
+  final String? hintText;
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final FormFieldValidator<String>? validator;
+  final int maxLines;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final dark = theme.brightness == Brightness.dark;
+    final fill = dark ? const Color(0xFF1A2435) : const Color(0xFFE4E8EF);
+    final borderColor = dark ? const Color(0xFFB0B8C8) : const Color(0xFF6B7280);
+    final fg = dark ? Colors.white : Colors.black87;
+    final hint = dark ? const Color(0xFF9CA8BC) : const Color(0xFF6B7280);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 4, end: 4, bottom: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: fg,
+              height: 1.2,
+            ),
+          ),
+        ),
+        TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          maxLines: obscureText ? 1 : maxLines,
+          minLines: 1,
+          style: TextStyle(color: fg, fontSize: 16, height: 1.35),
+          cursorColor: fg,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(color: hint, fontSize: 15),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            filled: true,
+            fillColor: fill,
+            isDense: true,
+            suffixIcon: suffixIcon,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: borderColor, width: 1.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: borderColor, width: 1.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: cs.primary, width: 2.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: cs.error, width: 1.5),
+            ),
+          ),
+          validator: validator,
+        ),
+      ],
+    );
+  }
 }

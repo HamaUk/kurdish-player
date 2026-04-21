@@ -1,6 +1,5 @@
 import 'package:api/api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../components/logo.dart';
 import '../../l10n/app_localizations.dart';
@@ -43,6 +42,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
     final isFileMode = widget.mode == M3uLoginMode.file;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final titleColor = theme.brightness == Brightness.dark ? Colors.white : Colors.black87;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -65,7 +65,6 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
       ),
       body: Stack(
         children: [
-          // Premium Background Gradient
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -79,7 +78,6 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
               ),
             ),
           ),
-          // Subtle Decorative Blobs
           Positioned(
             top: -100,
             right: -100,
@@ -90,12 +88,8 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                 shape: BoxShape.circle,
                 color: colorScheme.primary.withOpacity(0.05),
               ),
-            ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-                .fadeIn(duration: 1000.ms)
-                .scale(begin: const Offset(0.8, 0.8))
-                .slideY(begin: -0.05, end: 0.05, duration: 3.seconds, curve: Curves.easeInOut),
+            ),
           ),
-          
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -105,25 +99,20 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Logo(size: 150)
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .slideY(begin: -0.2, end: 0, curve: Curves.easeOutBack),
+                      const Logo(size: 150),
                       const SizedBox(height: 32),
                       Container(
                         decoration: BoxDecoration(
-                          color: theme.brightness == Brightness.dark 
-                              ? Colors.white.withOpacity(0.05) 
-                              : Colors.white,
+                          color: theme.brightness == Brightness.dark ? const Color(0xFF1C2230) : Colors.white,
                           borderRadius: BorderRadius.circular(28),
                           border: Border.all(
-                            color: theme.brightness == Brightness.dark 
-                                ? Colors.white.withOpacity(0.08) 
-                                : Colors.black.withOpacity(0.05),
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.white24
+                                : Colors.black.withOpacity(0.08),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withOpacity(0.12),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
@@ -140,41 +129,37 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: -0.5,
-                                  color: theme.brightness == Brightness.dark ? Colors.white : Colors.black87,
+                                  color: titleColor,
                                 ),
                                 textAlign: TextAlign.center,
-                              ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
-                              const SizedBox(height: 32),
-                              TextFormField(
+                              ),
+                              const SizedBox(height: 28),
+                              OnboardingLabeledField(
+                                label: l10n.buttonName,
                                 controller: _titleController,
-                                style: onboardingInputTextStyle(theme),
-                                decoration: onboardingInputDecoration(
-                                  theme,
-                                  labelText: l10n.buttonName,
-                                  prefixIcon: Icons.edit,
-                                ),
                                 validator: (value) => requiredValidator(context, value),
                               ),
                               const SizedBox(height: 20),
-                              TextFormField(
+                              OnboardingLabeledField(
+                                label: isFileMode ? l10n.titleEditM3U : l10n.liveCreateFormItemLabelUrl,
                                 controller: _urlController,
-                                style: onboardingInputTextStyle(theme),
-                                decoration: onboardingInputDecoration(
-                                  theme,
-                                  labelText: isFileMode ? l10n.titleEditM3U : l10n.liveCreateFormItemLabelUrl,
-                                  prefixIcon: isFileMode ? Icons.insert_drive_file : Icons.link,
-                                  suffixIcon: isFileMode
-                                      ? IconButton(
-                                          onPressed: _loadingPicker ? null : _pickM3uFile,
-                                          icon: _loadingPicker
-                                              ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                                              : const Icon(Icons.folder_open),
-                                        )
-                                      : null,
-                                ),
-                                validator: (value) => isFileMode ? requiredValidator(context, value) : urlValidator(context, value, true),
+                                hintText: isFileMode ? null : 'https://',
+                                suffixIcon: isFileMode
+                                    ? IconButton(
+                                        onPressed: _loadingPicker ? null : _pickM3uFile,
+                                        icon: _loadingPicker
+                                            ? const SizedBox(
+                                                width: 22,
+                                                height: 22,
+                                                child: CircularProgressIndicator(strokeWidth: 2),
+                                              )
+                                            : const Icon(Icons.folder_open),
+                                      )
+                                    : null,
+                                validator: (value) =>
+                                    isFileMode ? requiredValidator(context, value) : urlValidator(context, value, true),
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 36),
                               SizedBox(
                                 height: 56,
                                 child: FilledButton(
@@ -188,7 +173,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                             ],
                           ),
                         ),
-                      ).animate().slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
+                      ),
                     ],
                   ),
                 ),
@@ -221,9 +206,9 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
 
   Future<void> _submit(BuildContext context) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    
+
     String url = _urlController.text.trim();
-    
+
     final resp = await showNotification(
       context,
       Api.playlistInsert(url, _titleController.text.trim()),
