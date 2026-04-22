@@ -31,7 +31,9 @@ class PlayerControlsLite<T> extends StatefulWidget {
   State<PlayerControlsLite<T>> createState() => _PlayerControlsLiteState<T>();
 }
 
-class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
+class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> with PlayerActionsMixin {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _navigatorKey = GlobalKey<NavigatorState>();
   late final _controller = widget.controller;
   late final _progressController = PlayerProgressController(widget.controller);
   final _isShowControls = ValueNotifier(true);
@@ -136,7 +138,7 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
           return SizedBox(
             height: height,
             child: Theme(
-              data: ThemeData(
+              data: darkTheme.copyWith(
                 colorScheme: ColorScheme.fromSeed(
                   seedColor: widget.theme != null ? Color(widget.theme!) : Colors.blue,
                   brightness: Brightness.dark,
@@ -144,6 +146,7 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
                 appBarTheme: const AppBarTheme(iconTheme: IconThemeData(size: 20)),
               ),
               child: Scaffold(
+                key: _scaffoldKey,
                 appBar: PlayerAppbar(
                   show: _isShowControls,
                   title: _buildAppbarTitle(context),
@@ -159,7 +162,7 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
                                 errorWidget:
                                     (context, error) =>
                                         ErrorMessage(error: error, padding: const EdgeInsets.symmetric(horizontal: 16)),
-                              ),
+                                ),
                         );
                         if (device != null && context.mounted) {
                           _controller.pause();
@@ -178,13 +181,40 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
                       },
                       icon: const Icon(Icons.airplay_rounded),
                     ),
-                    const IconButton(onPressed: null, icon: Icon(Icons.more_vert_rounded)),
+                    IconButton(
+                      onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                      icon: const Icon(Icons.more_vert_rounded),
+                    ),
                   ],
                 ),
                 resizeToAvoidBottomInset: false,
                 backgroundColor: Colors.transparent,
                 extendBodyBehindAppBar: true,
                 extendBody: true,
+                endDrawer: Drawer(
+                  child: Container(
+                    width: 360,
+                    color: const Color(0xff202124),
+                    child: Navigator(
+                      key: _navigatorKey,
+                      onGenerateRoute:
+                          (settings) => MaterialPageRoute(
+                            builder:
+                                (context) => FutureBuilderHandler(
+                                  future: SharedPreferences.getInstance(),
+                                  builder: (context, snapshot) {
+                                    return PlayerSettings(
+                                      prefs: snapshot.requireData,
+                                      controller: _controller,
+                                      actions: (context) => actions(context, _controller),
+                                    );
+                                  },
+                                ),
+                            settings: settings,
+                          ),
+                    ),
+                  ),
+                ),
                 body: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -348,6 +378,7 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          _PlayerInfoView(_controller),
           ListenableBuilder(
             listenable: _controller.fatalError,
             builder:
@@ -408,6 +439,39 @@ class _PlayerControlsLiteState<T> extends State<PlayerControlsLite<T>> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PlayerInfoView<T> extends StatelessWidget {
+  const _PlayerInfoView(this._controller);
+
+  final PlayerController<T> _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, left: 12, right: 16),
+      child: ListenableBuilder(
+        builder:
+            (context, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_controller.title.value != null)
+                  Text(
+                    _controller.title.value!,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                Text(
+                  _controller.subTitle.value,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white70),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+        listenable: Listenable.merge([_controller.title, _controller.fatalError]),
       ),
     );
   }
