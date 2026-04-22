@@ -67,17 +67,24 @@ String? urlValidator(BuildContext context, String? value, [bool required = false
   if (RegExp(r'^driver?://(\d{1,3})(/\S*)?$').hasMatch(trimmedValue)) {
     return null;
   }
-  // Path-only strings are not fetchable HTTP URLs (common paste mistake).
-  if (trimmedValue.startsWith('/') && !trimmedValue.startsWith('//')) {
-    return AppLocalizations.of(context)!.formValidatorUrl;
+
+  // Smart extract check: If the text contains a valid http/https URL, it's valid.
+  final urlMatch = RegExp(r'https?://[^\s,]+').firstMatch(trimmedValue);
+  if (urlMatch != null) {
+    final candidate = urlMatch.group(0)!;
+    if (_isValidHttpLikeUrl(candidate)) {
+      return null;
+    }
   }
 
+  // Fallback for simple domain-only inputs (e.g. google.com)
   var candidate = trimmedValue;
-  if (!candidate.contains('://')) {
+  if (!candidate.contains('://') && !candidate.contains(' ')) {
     candidate = 'https://$candidate';
+    if (_isValidHttpLikeUrl(candidate)) {
+      return null;
+    }
   }
-  if (_isValidHttpLikeUrl(candidate)) {
-    return null;
-  }
+
   return AppLocalizations.of(context)!.formValidatorUrl;
 }
