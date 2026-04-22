@@ -35,7 +35,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       bottomNavigationBar: MobileBuilder(
         builder: (context, isMobile, child) => isMobile ? child : null,
         child: NavigationBar(
@@ -53,7 +52,6 @@ class _HomeViewState extends State<HomeView> {
               }).toList(),
         ),
       ),
-      backgroundColor: index == 0 ? Colors.transparent : null,
       body: Row(
         children: <Widget>[
           MobileBuilder(

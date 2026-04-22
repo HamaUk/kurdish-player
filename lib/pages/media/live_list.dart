@@ -62,55 +62,51 @@ class _LiveListPageState extends State<LiveListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      resizeToAvoidBottomInset: false,
-      body: BlocBuilder<IptvCubit, List<Playlist>?>(
-        builder: (context, items) {
-          if (items == null) return const Loading();
-          if (items.isEmpty) return const NoData();
+    return BlocBuilder<IptvCubit, List<Playlist>?>(
+      builder: (context, items) {
+        if (items == null) return const Loading();
+        if (items.isEmpty) return const NoData();
 
-          // Auto-load first playlist if none selected
-          if (_selectedPlaylist == null && !_loading) {
-            WidgetsBinding.instance.addPostFrameCallback((_) => _loadPlaylist(items.first));
-          }
+        // Auto-load first playlist if none selected
+        if (_selectedPlaylist == null && !_loading) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => _loadPlaylist(items.first));
+        }
 
-          return Row(
-            children: [
-              // Main content: Player + Channel Selection
-              Expanded(
-                child: Column(
-                  children: [
-                    // Professional Player Preview
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      child: ClipRect(
-                        child: PlayerControlsLite(
-                          _controller,
-                          artwork: const Logo(size: 80),
-                        ),
+        return Row(
+          children: [
+            // Main content: Player + Channel Selection
+            Expanded(
+              child: Column(
+                children: [
+                  // Professional Player Preview
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: ClipRect(
+                      child: PlayerControlsLite(
+                        _controller,
+                        artwork: const Logo(size: 80),
                       ),
                     ),
-                    const Divider(height: 1),
-                    // Grouped Categories and Channels List
-                    Expanded(
-                      child: _loading
-                          ? const Loading()
-                          : _ChannelListGrouped(
-                            controller: _controller,
-                            onTap: (index) async {
-                              await _controller.next(index);
-                              await _controller.play();
-                            },
-                          ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const Divider(height: 1),
+                  // Grouped Categories and Channels List
+                  Expanded(
+                    child: _loading
+                        ? const Loading()
+                        : _ChannelListGrouped(
+                          controller: _controller,
+                          onTap: (index) async {
+                            await _controller.next(index);
+                            await _controller.play();
+                          },
+                        ),
+                  ),
+                ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 
