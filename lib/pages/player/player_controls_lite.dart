@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:video_player/player.dart';
+import 'package:video_player/player.dart' hide PlayerSettings;
 
 import '../../components/error_message.dart';
 import '../../components/future_builder_handler.dart';

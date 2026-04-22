@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:video_player/player.dart';
+import 'package:video_player/player.dart' hide PlayerSettings;
 
 import '../../components/async_image.dart';
 import '../../components/future_builder_handler.dart';
@@ -23,6 +23,7 @@ import '../../theme.dart';
 import '../../utils/utils.dart';
 import '../components/image_card.dart';
 import '../utils/utils.dart';
+import '../../pages_tv/player/player_controls.dart';
 import 'mixins/player_actions.dart';
 import 'player_appbar.dart';
 import 'player_controls_gesture.dart';
