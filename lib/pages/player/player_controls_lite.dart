@@ -7,15 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/player.dart';
 
 import '../../components/error_message.dart';
+import '../../components/future_builder_handler.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/user_config.dart';
+import '../../theme.dart';
 import '../../utils/utils.dart';
 import '../player/player_controls_full.dart';
 import '../utils/utils.dart';
+import '../../pages_tv/player/player_controls.dart';
 import 'cast_adaptor.dart';
+import 'mixins/player_actions.dart';
 import 'player_appbar.dart';
 import 'player_controls_gesture.dart';
 
