@@ -26,6 +26,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
   late final _urlController = TextEditingController();
 
   bool _loadingPicker = false;
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -169,11 +170,17 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                               SizedBox(
                                 height: 56,
                                 child: FilledButton(
-                                  onPressed: () => _submit(context),
-                                  child: Text(
-                                    l10n.buttonSubmit,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                  ),
+                                  onPressed: _loading ? null : () => _submit(context),
+                                  child: _loading
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                        )
+                                      : Text(
+                                          l10n.buttonSubmit,
+                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        ),
                                 ),
                               ),
                             ],
@@ -222,7 +229,7 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
 
   Future<void> _submit(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    if (l10n == null) return;
+    if (l10n == null || _loading) return;
 
     if (!(_formKey.currentState?.validate() ?? false)) {
       if (!context.mounted) return;
@@ -236,20 +243,25 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
 
     String url = normalizeHttpUrlForFetch(_urlController.text.trim());
 
-    final resp = await showNotification(
-      context,
-      Api.playlistInsert(url, _titleController.text.trim()),
-    );
-    if (resp?.error == null && context.mounted) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeView()), (route) => false);
-    } else if (resp?.error != null && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.redAccent,
-          content: Text(resp!.error.toString()),
-        ),
+    setState(() => _loading = true);
+    try {
+      final resp = await showNotification(
+        context,
+        Api.playlistInsert(url, _titleController.text.trim()),
       );
+      if (resp?.error == null && context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeView()), (route) => false);
+      } else if (resp?.error != null && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.redAccent,
+            content: Text(resp!.error.toString()),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
     }
   }
 }

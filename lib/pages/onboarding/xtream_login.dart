@@ -22,6 +22,8 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
   late final _usernameController = TextEditingController();
   late final _passwordController = TextEditingController();
 
+  bool _loading = false;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -157,8 +159,14 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
                               SizedBox(
                                 height: 56,
                                 child: FilledButton.icon(
-                                  onPressed: () => _onSubmit(context),
-                                  icon: const Icon(Icons.login),
+                                  onPressed: _loading ? null : () => _onSubmit(context),
+                                  icon: _loading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                        )
+                                      : const Icon(Icons.login),
                                   label: Text(
                                     l10n.buttonSubmit,
                                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -182,7 +190,7 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
 
   Future<void> _onSubmit(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    if (l10n == null) return;
+    if (l10n == null || _loading) return;
 
     if (!(_formKey.currentState?.validate() ?? false)) {
       if (!context.mounted) return;
@@ -198,19 +206,24 @@ class _XtreamLoginPageState extends State<XtreamLoginPage> {
     final pass = _passwordController.text.trim();
     final title = _titleController.text.trim();
 
-    final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
-    final xtreamUrl = "$baseUrl/get.php?username=$user&password=$pass&type=m3u_plus&output=ts";
+    setState(() => _loading = true);
+    try {
+      final baseUrl = host.endsWith('/') ? host.substring(0, host.length - 1) : host;
+      final xtreamUrl = "$baseUrl/get.php?username=$user&password=$pass&type=m3u_plus&output=ts";
 
-    final resp = await showNotification(
-      context,
-      Api.playlistInsert(xtreamUrl, title),
-    );
-
-    if (resp?.error == null && context.mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const HomeView()),
-        (route) => false,
+      final resp = await showNotification(
+        context,
+        Api.playlistInsert(xtreamUrl, title),
       );
+
+      if (resp?.error == null && context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeView()),
+          (route) => false,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
     }
   }
 }
