@@ -113,126 +113,129 @@ Future<(int, DriverFile)?> showDriverFilePicker(
     elevation: 0,
     constraints: const BoxConstraints(minWidth: double.infinity),
     builder:
-        (context) => SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16, left: 32, right: 32),
-                child: Text(
-                  AppLocalizations.of(context)!.titleSelectAnAccount,
-                  style: Theme.of(context).textTheme.titleMedium,
+        (context) => Theme(
+          data: ThemeData.dark(),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 32, right: 32),
+                  child: Text(
+                    AppLocalizations.of(context)!.titleSelectAnAccount,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 250,
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return Scrollbar(
-                      child: CustomScrollView(
-                        scrollDirection: Axis.horizontal,
-                        slivers: [
-                          FutureBuilderSliverHandler(
-                            future: Api.driverQueryAll(),
-                            builder:
-                                (context, snapshot) => SliverPadding(
-                                  padding:
-                                      snapshot.requireData.isNotEmpty
-                                          ? const EdgeInsets.only(left: 32, right: 32, bottom: 12)
-                                          : const EdgeInsets.only(left: 12),
-                                  sliver: SliverList.builder(
-                                    itemCount: snapshot.requireData.length,
-                                    itemBuilder: (context, index) {
-                                      final item = snapshot.requireData[index];
-                                      return _buildAccountCard(context, item, () async {
-                                        final file = await _showFilePicker(
-                                          context,
-                                          title: title,
-                                          type: FilePickerType.remote,
-                                          driverId: item.id,
-                                          defaultPath: '/',
-                                          fileType: fileType,
-                                          selectableType: selectableType,
-                                        );
-                                        if (file != null) {
-                                          if (context.mounted) Navigator.of(context).pop((item.id, file));
-                                        }
-                                      });
+                SizedBox(
+                  height: 250,
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return Scrollbar(
+                        child: CustomScrollView(
+                          scrollDirection: Axis.horizontal,
+                          slivers: [
+                            FutureBuilderSliverHandler(
+                              future: Api.driverQueryAll(),
+                              builder:
+                                  (context, snapshot) => SliverPadding(
+                                    padding:
+                                        snapshot.requireData.isNotEmpty
+                                            ? const EdgeInsets.only(left: 32, right: 32, bottom: 12)
+                                            : const EdgeInsets.only(left: 12),
+                                    sliver: SliverList.builder(
+                                      itemCount: snapshot.requireData.length,
+                                      itemBuilder: (context, index) {
+                                        final item = snapshot.requireData[index];
+                                        return _buildAccountCard(context, item, () async {
+                                          final file = await _showFilePicker(
+                                            context,
+                                            title: title,
+                                            type: FilePickerType.remote,
+                                            driverId: item.id,
+                                            defaultPath: '/',
+                                            fileType: fileType,
+                                            selectableType: selectableType,
+                                          );
+                                          if (file != null) {
+                                            if (context.mounted) Navigator.of(context).pop((item.id, file));
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+                            ),
+                            FutureBuilderSliverHandler(
+                              future: FilePicker.externalUsbStorages(),
+                              builder: (context, snapshot) {
+                                return SliverList.builder(
+                                  itemCount: snapshot.requireData!.length,
+                                  itemBuilder: (context, index) {
+                                    final item = snapshot.requireData![index];
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          spacing: 4,
+                                          children: [
+                                            const Text(''),
+                                            IconButton.filledTonal(
+                                              onPressed: () async {
+                                                await FilePicker.requestStorageManagePermission();
+                                                if (!context.mounted) return;
+                                                openFilePicker(item.path);
+                                              },
+                                              icon: Icon(_guessStorageTypeByDesc(item.desc)),
+                                            ),
+                                            Text(item.desc, style: Theme.of(context).textTheme.labelMedium),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            SliverToBoxAdapter(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: IconButton.filledTonal(
+                                    onPressed: () async {
+                                      final defaultPath = await FilePicker.externalStoragePath ?? '/';
+                                      await FilePicker.requestStoragePermission();
+                                      if (!context.mounted) return;
+                                      openFilePicker(defaultPath);
                                     },
+                                    icon: const Icon(Icons.folder_open),
                                   ),
                                 ),
-                          ),
-                          FutureBuilderSliverHandler(
-                            future: FilePicker.externalUsbStorages(),
-                            builder: (context, snapshot) {
-                              return SliverList.builder(
-                                itemCount: snapshot.requireData!.length,
-                                itemBuilder: (context, index) {
-                                  final item = snapshot.requireData![index];
-                                  return Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        spacing: 4,
-                                        children: [
-                                          const Text(''),
-                                          IconButton.filledTonal(
-                                            onPressed: () async {
-                                              await FilePicker.requestStorageManagePermission();
-                                              if (!context.mounted) return;
-                                              openFilePicker(item.path);
-                                            },
-                                            icon: Icon(_guessStorageTypeByDesc(item.desc)),
-                                          ),
-                                          Text(item.desc, style: Theme.of(context).textTheme.labelMedium),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                          SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: IconButton.filledTonal(
-                                  onPressed: () async {
-                                    final defaultPath = await FilePicker.externalStoragePath ?? '/';
-                                    await FilePicker.requestStoragePermission();
-                                    if (!context.mounted) return;
-                                    openFilePicker(defaultPath);
-                                  },
-                                  icon: const Icon(Icons.folder_open),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: IconButton.filledTonal(
+                                    onPressed: () async {
+                                      final flag = await navigateTo<bool>(context, const AccountLoginPage());
+                                      if (flag ?? false) setState(() {});
+                                    },
+                                    icon: const Icon(Icons.add),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: IconButton.filledTonal(
-                                  onPressed: () async {
-                                    final flag = await navigateTo<bool>(context, const AccountLoginPage());
-                                    if (flag ?? false) setState(() {});
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
     isScrollControlled: true,

@@ -34,10 +34,11 @@ class _NotificationLayout<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget content;
     switch (snapshot.connectionState) {
       case ConnectionState.waiting:
       case ConnectionState.active:
-        return Column(
+        content = Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -45,14 +46,27 @@ class _NotificationLayout<T> extends StatelessWidget {
             Text(loadingText ?? AppLocalizations.of(context)!.modalNotificationLoadingText),
           ],
         );
+        break;
       case ConnectionState.done:
       case ConnectionState.none:
         if (snapshot.hasError) {
-          return ErrorMessage(error: snapshot.error, leading: _errorIcon);
+          content = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ErrorMessage(error: snapshot.error, leading: _errorIcon),
+              const SizedBox(height: 24),
+              Center(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(NotificationResponse(data: snapshot.data, error: snapshot.error)),
+                  child: Text(AppLocalizations.of(context)!.buttonConfirm),
+                ),
+              ),
+            ],
+          );
         } else {
           if (showSuccess ?? true) {
             _pop(context, const Duration(seconds: 1), snapshot.data, snapshot.error);
-            return Column(
+            content = Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -63,7 +77,7 @@ class _NotificationLayout<T> extends StatelessWidget {
             );
           } else {
             _pop(context, Duration.zero, snapshot.data, snapshot.error);
-            return Column(
+            content = Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,6 +88,14 @@ class _NotificationLayout<T> extends StatelessWidget {
           }
         }
     }
+
+    return Theme(
+      data: ThemeData.dark(),
+      child: DefaultTextStyle(
+        style: const TextStyle(color: Colors.white),
+        child: content,
+      ),
+    );
   }
 
   void _pop(BuildContext context, Duration delay, T? data, Object? error) {
@@ -130,24 +152,27 @@ Future<bool?> showConfirm(BuildContext context, String confirmText) async {
   return showDialog<bool>(
     context: context,
     builder:
-        (context) => AlertDialog(
-          backgroundColor: const Color(0xFF141A2A),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Text(
-            AppLocalizations.of(context)!.modalTitleConfirm,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        (context) => Theme(
+          data: ThemeData.dark(),
+          child: AlertDialog(
+            backgroundColor: const Color(0xFF141A2A),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            title: Text(
+              AppLocalizations.of(context)!.modalTitleConfirm,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            content: Text(confirmText, style: const TextStyle(color: Colors.white70)),
+            actions: [
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(AppLocalizations.of(context)!.buttonConfirm),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(AppLocalizations.of(context)!.buttonCancel),
+              ),
+            ],
           ),
-          content: Text(confirmText),
-          actions: [
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(AppLocalizations.of(context)!.buttonConfirm),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(AppLocalizations.of(context)!.buttonCancel),
-            ),
-          ],
         ),
   );
 }

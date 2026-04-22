@@ -147,15 +147,19 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
                                 hintText: isFileMode ? null : 'https://',
                                 suffixIcon: isFileMode
                                     ? IconButton(
-                                        style: IconButton.styleFrom(foregroundColor: const Color(0xFFF2F5FF)),
-                                        onPressed: _loadingPicker ? null : _pickM3uFile,
                                         icon: _loadingPicker
                                             ? const SizedBox(
                                                 width: 22,
                                                 height: 22,
-                                                child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFF2F5FF)),
+                                                child: CircularProgressIndicator(strokeWidth: 2),
                                               )
-                                            : const Icon(Icons.folder_open),
+                                            : Icon(
+                                                Icons.file_upload_rounded,
+                                                color: theme.brightness == Brightness.dark
+                                                    ? Colors.white
+                                                    : theme.colorScheme.primary,
+                                              ),
+                                        onPressed: _loadingPicker ? null : _pickM3uFile,
                                       )
                                     : null,
                                 validator: (value) =>
@@ -199,6 +203,16 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
         final file = res.$2;
         _urlController.text = 'driver://${res.$1}/${file.id}';
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.redAccent,
+            content: Text(e.toString()),
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() => _loadingPicker = false);
@@ -228,6 +242,14 @@ class _M3uLoginPageState extends State<M3uLoginPage> {
     );
     if (resp?.error == null && context.mounted) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeView()), (route) => false);
+    } else if (resp?.error != null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.redAccent,
+          content: Text(resp!.error.toString()),
+        ),
+      );
     }
   }
 }

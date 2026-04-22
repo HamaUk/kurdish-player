@@ -25,7 +25,7 @@ String sanitizeUrlInput(String raw) {
   var s = raw.trim();
   if (s.isEmpty) return s;
   if (s.startsWith('\uFEFF')) s = s.substring(1);
-  s = s.replaceAll(RegExp(r'[\u200e\u200f\u202a-\u202e\u2066-\u2069]'), '');
+  s = s.replaceAll(RegExp(r'[\u200b\u200e\u200f\u202a-\u202e\u2066-\u2069]'), '');
   return s.trim();
 }
 
@@ -42,6 +42,14 @@ bool _isValidHttpLikeUrl(String candidate) {
 String normalizeHttpUrlForFetch(String raw) {
   final t = sanitizeUrlInput(raw);
   if (t.isEmpty) return t;
+
+  // Smart extract: Find the first substring that looks like an http/https URL
+  // This handles cases where users paste chat messages like "[time] Name: http://..."
+  final urlMatch = RegExp(r'https?://[^\s,]+').firstMatch(t);
+  if (urlMatch != null) {
+    return urlMatch.group(0)!;
+  }
+
   if (RegExp(r'^driver?://').hasMatch(t)) return t;
   if (!t.contains('://')) {
     return 'https://$t';
