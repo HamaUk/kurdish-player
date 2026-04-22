@@ -211,7 +211,7 @@ class _PlayerControlsFullState<T> extends State<PlayerControlsFull<T>> with Play
                       icon: const Icon(Icons.picture_in_picture_rounded),
                     ),
                     IconButton(
-                      onPressed: () => _scaffoldKey.currentState!.openEndDrawer(),
+                      onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
                       icon: const Icon(Icons.more_vert_rounded),
                     ),
                   ],

@@ -594,15 +594,15 @@ class PlayerSettings extends StatelessWidget {
     super.key,
     required this.controller,
     this.actions,
-    required this.onSeekSpeedChanged,
-    required this.onShowLiteProgressbarChanged,
+    this.onSeekSpeedChanged,
+    this.onShowLiteProgressbarChanged,
     required this.prefs,
   });
 
   final SharedPreferences prefs;
   final PlayerController<dynamic> controller;
-  final ValueChanged<int> onSeekSpeedChanged;
-  final ValueChanged<bool> onShowLiteProgressbarChanged;
+  final ValueChanged<int>? onSeekSpeedChanged;
+  final ValueChanged<bool>? onShowLiteProgressbarChanged;
   final List<Widget> Function(BuildContext)? actions;
 
   @override
@@ -799,7 +799,7 @@ class PlayerSettings extends StatelessWidget {
                         setState(() {
                           prefs.setBool('playerConfig.showLiteProgressbar', value);
                         });
-                        onShowLiteProgressbarChanged(value);
+                        onShowLiteProgressbarChanged?.call(value);
                       },
                     );
                   },
@@ -833,7 +833,7 @@ class PlayerSettings extends StatelessWidget {
                             setState(() {
                               prefs.setInt('playerConfig.fastForwardSpeed', value.round());
                             });
-                            onSeekSpeedChanged(value.round());
+                            onSeekSpeedChanged?.call(value.round());
                           },
                         ),
                       ),
