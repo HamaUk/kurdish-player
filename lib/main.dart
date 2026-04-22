@@ -121,9 +121,9 @@ class MainApp extends StatelessWidget {
       builder: (context, widget) {
         if (widget == null) return const SizedBox.shrink();
         
-        // Set text direction based on locale (Arabic and Hebrew are RTL)
+        // Set text direction based on locale (Arabic, Hebrew, and Kurdish are RTL)
         final locale = Localizations.localeOf(context);
-        final isRtl = locale.languageCode == 'ar' || locale.languageCode == 'he' || locale.languageCode == 'fa';
+        final isRtl = locale.languageCode == 'ar' || locale.languageCode == 'he' || locale.languageCode == 'ckb' || locale.languageCode == 'fa';
         
         return Directionality(
           textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
